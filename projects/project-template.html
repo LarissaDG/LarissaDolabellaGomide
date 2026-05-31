@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--
+  ╔══════════════════════════════════════════════════════╗
+  ║  TEMPLATE DE PÁGINA DE PROJETO                       ║
+  ║  Salve como: projects/nome-do-projeto.html           ║
+  ║                                                      ║
+  ║  O que editar:                                       ║
+  ║  1. <title> e meta description                       ║
+  ║  2. Bloco PROJECT META (número, título, tags, ano)   ║
+  ║  3. Bloco PROJECT INTRO (contexto + challenge)       ║
+  ║  4. Bloco PROJECT DETAILS (processo, resultado)      ║
+  ║  5. GALLERY — adicione <img> dentro de .gallery-grid ║
+  ║  6. VIDEO — cole o ID do YouTube em data-yt-id       ║
+  ║  7. NEXT PROJECT — link para o próximo               ║
+  ╚══════════════════════════════════════════════════════╝
+-->
+<title>Lenços Generativos com IA — Larissa DG</title>
+<meta name="description" content="Coleção de lenços de seda gerada por algoritmos procedurais e IA generativa.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080a0e;
+    --surface: #0e1118;
+    --surface2: #151a24;
+    --accent: #c8f060;
+    --accent2: #60d4f0;
+    --text: #e8e4dc;
+    --muted: #5a6070;
+    --border: rgba(200,240,96,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── Cursor ── */
+  .cursor { position: fixed; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); }
+  .cursor-ring { position: fixed; width: 32px; height: 32px; border: 1px solid rgba(200,240,96,0.4); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: all 0.18s ease; }
+
+  /* ── Nav ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.5rem 3rem;
+    background: linear-gradient(to bottom, rgba(8,10,14,0.98) 0%, transparent 100%);
+  }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 300; letter-spacing: 0.15em; color: var(--accent); text-decoration: none; }
+  .nav-back { color: var(--muted); text-decoration: none; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; transition: color 0.3s; display: flex; align-items: center; gap: 0.6rem; }
+  .nav-back:hover { color: var(--accent); }
+
+  /* ── Hero ── */
+  .project-hero {
+    height: 80vh; min-height: 500px;
+    position: relative;
+    display: flex; align-items: flex-end;
+    overflow: hidden;
+  }
+  .project-hero-bg {
+    position: absolute; inset: 0;
+    background: var(--surface2);
+    /* ↓ SUBSTITUA pela imagem principal do projeto ↓
+       background-image: url('../images/lencos/hero.jpg');
+       background-size: cover;
+       background-position: center;
+    */
+  }
+  /* placeholder generativo — remova quando tiver imagem real */
+  .project-hero-bg canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+  .project-hero::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(8,10,14,0.92) 0%, rgba(8,10,14,0.3) 60%, transparent 100%);
+    pointer-events: none;
+  }
+  .project-hero-content {
+    position: relative; z-index: 2;
+    padding: 4rem 3rem; max-width: 1200px; width: 100%; margin: 0 auto;
+  }
+
+  /* ── Project Meta ── */
+  .project-meta-bar {
+    display: flex; gap: 2.5rem; flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  .meta-item { display: flex; flex-direction: column; gap: 0.3rem; }
+  .meta-label { font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); }
+  .meta-value { font-size: 0.7rem; letter-spacing: 0.06em; color: var(--text); }
+  .meta-value.accent { color: var(--accent); }
+
+  .project-num-large {
+    font-size: 0.6rem; letter-spacing: 0.25em;
+    color: var(--accent); margin-bottom: 1rem;
+  }
+  h1.project-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 6vw, 5.5rem);
+    font-weight: 300; line-height: 1.0;
+    letter-spacing: -0.02em;
+  }
+  h1.project-title em { font-style: italic; color: var(--accent); }
+
+  /* ── Body ── */
+  .project-body {
+    max-width: 1200px; margin: 0 auto;
+    padding: 6rem 3rem;
+    display: grid; grid-template-columns: 2fr 1fr;
+    gap: 6rem; align-items: start;
+  }
+  .project-main {}
+  .project-sidebar { position: sticky; top: 7rem; }
+
+  h2.body-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; font-weight: 300;
+    margin-bottom: 1.5rem; margin-top: 3rem;
+  }
+  h2.body-heading:first-child { margin-top: 0; }
+  h2.body-heading em { font-style: italic; color: var(--accent); }
+
+  .body-text {
+    font-size: 0.78rem; line-height: 2.1;
+    color: #9aa0b0; margin-bottom: 1.5rem;
+  }
+  .body-text strong { color: var(--text); font-weight: 400; }
+
+  .body-quote {
+    border-left: 2px solid var(--accent);
+    padding: 1rem 1.5rem;
+    margin: 2.5rem 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem; font-style: italic;
+    font-weight: 300; line-height: 1.5;
+    color: var(--text);
+  }
+
+  /* sidebar details */
+  .sidebar-section { margin-bottom: 2.5rem; }
+  .sidebar-label { font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem; }
+  .sidebar-label::before { content: ''; width: 1rem; height: 1px; background: var(--accent); display: block; }
+  .sidebar-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .sidebar-list li { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.04em; display: flex; align-items: center; gap: 0.6rem; }
+  .sidebar-list li::before { content: ''; width: 14px; height: 1px; background: var(--muted); flex-shrink: 0; }
+
+  /* ── Divider ── */
+  .divider { width: 100%; height: 1px; background: linear-gradient(to right, transparent, var(--border), transparent); }
+
+  /* ── Gallery ── */
+  #gallery { padding: 4rem 3rem 6rem; max-width: 1200px; margin: 0 auto; }
+  .gallery-label { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 2.5rem; display: flex; align-items: center; gap: 0.8rem; }
+  .gallery-label::before { content: ''; width: 1.5rem; height: 1px; background: var(--accent); display: block; }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: 240px;
+    gap: 0.8rem;
+  }
+  /* Use estas classes nas imagens: */
+  /* .g-wide  = span 8   .g-med = span 6   .g-third = span 4  .g-full = span 12 */
+  /* .g-tall  = 2 rows */
+  .g-wide  { grid-column: span 8; }
+  .g-med   { grid-column: span 6; }
+  .g-third { grid-column: span 4; }
+  .g-full  { grid-column: span 12; }
+  .g-tall  { grid-row: span 2; }
+
+  .gallery-item {
+    overflow: hidden; position: relative;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+  }
+  .gallery-item img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    filter: grayscale(10%);
+    transition: transform 0.6s ease, filter 0.4s ease;
+  }
+  .gallery-item:hover img { transform: scale(1.04); filter: grayscale(0%); }
+
+  /* placeholder quando não há imagem */
+  .gallery-placeholder {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.6rem; letter-spacing: 0.15em; color: var(--muted);
+    text-transform: uppercase;
+    background: repeating-linear-gradient(
+      45deg,
+      var(--surface2) 0px, var(--surface2) 10px,
+      var(--bg) 10px, var(--bg) 11px
+    );
+  }
+
+  /* ── Video ── */
+  #video-section { padding: 0 3rem 6rem; max-width: 1200px; margin: 0 auto; }
+  .video-label { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 2rem; display: flex; align-items: center; gap: 0.8rem; }
+  .video-label::before { content: ''; width: 1.5rem; height: 1px; background: var(--accent); display: block; }
+  .video-wrapper {
+    position: relative; padding-bottom: 56.25%; height: 0;
+    border: 1px solid var(--border); overflow: hidden;
+    background: var(--surface2);
+  }
+  .video-wrapper iframe {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%; border: 0;
+  }
+  /* Lazy load — iframe só monta quando o user clicar */
+  .video-poster {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    cursor: none; background: var(--surface2);
+  }
+  .video-poster img { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; }
+  .play-btn {
+    position: absolute;
+    width: 60px; height: 60px;
+    border: 1px solid rgba(200,240,96,0.5);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; color: var(--accent);
+    transition: all 0.3s;
+    background: rgba(8,10,14,0.6);
+  }
+  .video-poster:hover .play-btn { background: rgba(200,240,96,0.15); transform: scale(1.1); }
+
+  /* ── Next project ── */
+  .next-project {
+    display: block; text-decoration: none;
+    padding: 4rem 3rem;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+  .next-project:hover { background: var(--surface2); }
+  .next-label { font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
+  .next-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 300; color: var(--text);
+    display: flex; align-items: center; gap: 1.5rem;
+  }
+  .next-title em { font-style: italic; color: var(--accent); }
+  .next-arrow { color: var(--accent); transition: transform 0.3s; }
+  .next-project:hover .next-arrow { transform: translateX(8px); }
+
+  /* ── Footer ── */
+  footer { padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); font-size: 0.6rem; letter-spacing: 0.1em; color: var(--muted); }
+
+  /* ── Reveal ── */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .project-hero-content { padding: 3rem 1.5rem; }
+    .project-body { grid-template-columns: 1fr; gap: 2.5rem; padding: 4rem 1.5rem; }
+    .project-sidebar { position: static; }
+    #gallery, #video-section { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; }
+    .g-wide, .g-med, .g-third, .g-full { grid-column: span 2; }
+    .g-tall { grid-row: span 1; }
+    .next-project { padding: 3rem 1.5rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="../index.html">L — DG</a>
+  <a class="nav-back" href="../index.html">← Todos os projetos</a>
+</nav>
+
+<!-- ════════════════════════════════════
+     HERO — edite o fundo aqui
+     ════════════════════════════════════ -->
+<header class="project-hero">
+  <div class="project-hero-bg">
+    <!-- Quando tiver imagem: apague o <canvas> e descomente o background-image no CSS acima -->
+    <canvas id="hero-canvas"></canvas>
+  </div>
+  <div class="project-hero-content">
+    <!-- ① EDITE AQUI: número, título, tags, ano, papel -->
+    <div class="project-num-large">001 / 005</div>
+    <h1 class="project-title">Lenços <em>Generativos</em><br>com IA</h1>
+    <div class="project-meta-bar" style="margin-top:1.5rem">
+      <div class="meta-item">
+        <span class="meta-label">Ano</span>
+        <span class="meta-value">2024</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Papel</span>
+        <span class="meta-value">Design · Pesquisa · IA</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Contexto</span>
+        <span class="meta-value">GENLab / UFMG</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Status</span>
+        <span class="meta-value accent">Concluído</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ════════════════════════════════════
+     BODY — texto + sidebar
+     ════════════════════════════════════ -->
+<div class="project-body">
+
+  <!-- ② EDITE AQUI: texto principal do projeto -->
+  <div class="project-main reveal">
+
+    <h2 class="body-heading"><em>Contexto</em> e desafio</h2>
+    <p class="body-text">
+      Descreva aqui de onde surgiu o projeto: qual era o problema, o briefing, a motivação de pesquisa.
+      Seja específica — o recrutador quer entender <strong>por que esse projeto existe</strong>.
+    </p>
+    <p class="body-text">
+      Exemplo: <em>"O projeto nasceu como pesquisa no GENLab/UFMG com o objetivo de investigar se algoritmos procedurais poderiam gerar padrões têxteis esteticamente coesos sem intervenção manual cena a cena."</em>
+    </p>
+
+    <div class="body-quote">
+      "Uma frase marcante que resuma a filosofia ou insight central do projeto."
+    </div>
+
+    <h2 class="body-heading">O <em>processo</em></h2>
+    <p class="body-text">
+      Descreva as etapas: pesquisa referencial, testes, ferramentas usadas, iterações, decisões de direção de arte.
+      Mostre raciocínio criativo — não só o resultado final.
+    </p>
+    <p class="body-text">
+      <strong>Ferramentas utilizadas:</strong> Processing para os algoritmos de padrão, Midjourney para exploração inicial de estética, Adobe Illustrator para refinamento vetorial, exportação para estamparia digital.
+    </p>
+
+    <h2 class="body-heading">Resultado e <em>aprendizados</em></h2>
+    <p class="body-text">
+      O que foi entregue? Quais métricas ou feedbacks? O que você faria diferente?
+      Encerre com algo que mostre crescimento.
+    </p>
+
+  </div>
+
+  <!-- ③ EDITE AQUI: sidebar com detalhes técnicos -->
+  <aside class="project-sidebar reveal" style="transition-delay:0.2s">
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Ferramentas</div>
+      <ul class="sidebar-list">
+        <li>Processing / p5.js</li>
+        <li>Midjourney</li>
+        <li>Adobe Illustrator</li>
+        <li>Photoshop</li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Técnicas</div>
+      <ul class="sidebar-list">
+        <li>Design Generativo</li>
+        <li>Algoritmos Procedurais</li>
+        <li>IA Generativa de Imagem</li>
+        <li>Estamparia Digital</li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Categorias</div>
+      <ul class="sidebar-list">
+        <li>Moda &amp; Têxtil</li>
+        <li>Pesquisa Aplicada</li>
+        <li>Design de Superfície</li>
+      </ul>
+    </div>
+
+  </aside>
+
+</div>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════
+     GALLERY
+     Instruções:
+     - Copie imagens para images/lencos/
+     - Use classes: g-wide, g-med, g-third, g-full
+     - Adicione g-tall para dobrar a altura
+     ════════════════════════════════════ -->
+<section id="gallery">
+  <div class="gallery-label reveal">Galeria</div>
+  <div class="gallery-grid reveal" style="transition-delay:0.1s">
+
+    <!-- ④ SUBSTITUA pelos seus <img> reais -->
+    <div class="gallery-item g-wide g-tall">
+      <!-- <img src="../images/lencos/img1.jpg" alt="Padrão generativo — variação 01"> -->
+      <div class="gallery-placeholder">Imagem principal · 800×600px sugerido</div>
+    </div>
+    <div class="gallery-item g-med">
+      <!-- <img src="../images/lencos/img2.jpg" alt="Detalhe do algoritmo"> -->
+      <div class="gallery-placeholder">Detalhe</div>
+    </div>
+    <div class="gallery-item g-med">
+      <!-- <img src="../images/lencos/img3.jpg" alt="Variação de cor"> -->
+      <div class="gallery-placeholder">Variação</div>
+    </div>
+    <div class="gallery-item g-third">
+      <div class="gallery-placeholder">Close</div>
+    </div>
+    <div class="gallery-item g-third">
+      <div class="gallery-placeholder">Processo</div>
+    </div>
+    <div class="gallery-item g-third">
+      <div class="gallery-placeholder">Final</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     VIDEO — cole o ID do YouTube abaixo
+     Ex: https://youtu.be/dQw4w9WgXcQ → ID = dQw4w9WgXcQ
+     ════════════════════════════════════ -->
+<section id="video-section" class="reveal">
+  <div class="video-label">Vídeo do projeto</div>
+  <!-- ⑤ EDITE data-yt-id com o ID real do vídeo -->
+  <div class="video-wrapper">
+    <div class="video-poster" id="video-poster" data-yt-id="SEU_ID_AQUI">
+      <!-- thumbnail opcional: <img src="../images/lencos/video-thumb.jpg" alt=""> -->
+      <div class="play-btn">▶</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════
+     NEXT PROJECT — ⑥ edite href e título
+     ════════════════════════════════════ -->
+<a href="joalheria.html" class="next-project">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="next-label">Próximo projeto</div>
+    <div class="next-title">
+      Joalheria <em>Computacional</em>
+      <span class="next-arrow">→</span>
+    </div>
+  </div>
+</a>
+
+<footer>
+  <span>Larissa DG — Visual &amp; Motion Designer</span>
+  <span>© 2025</span>
+</footer>
+
+<script>
+/* ── Cursor ── */
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+(function animateCursor() {
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(animateCursor);
+})();
+document.querySelectorAll('a, .gallery-item, .play-btn').forEach(el => {
+  el.addEventListener('mouseenter', () => { ring.style.transform = 'translate(-50%,-50%) scale(2.2)'; ring.style.borderColor = 'rgba(200,240,96,0.6)'; });
+  el.addEventListener('mouseleave', () => { ring.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.borderColor = 'rgba(200,240,96,0.4)'; });
+});
+
+/* ── Hero canvas placeholder ── */
+(function() {
+  const canvas = document.getElementById('hero-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, t = 0;
+  function resize() { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; }
+  resize(); window.addEventListener('resize', resize);
+  function draw() {
+    ctx.fillStyle = 'rgba(14,17,24,0.12)'; ctx.fillRect(0,0,W,H); t += 0.004;
+    for (let i = 0; i < 3; i++) {
+      const x = W * (0.2 + i*0.3) + Math.sin(t + i) * 60;
+      const y = H * 0.5 + Math.cos(t*0.7 + i*1.2) * 80;
+      const r = 150 + Math.sin(t*0.5+i) * 50;
+      const g = ctx.createRadialGradient(x,y,0,x,y,r);
+      const hue = i === 0 ? 80 : (i === 1 ? 190 : 50);
+      g.addColorStop(0, `hsla(${hue},60%,55%,0.08)`);
+      g.addColorStop(1, 'transparent');
+      ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+    }
+    // grid lines
+    ctx.strokeStyle = 'rgba(200,240,96,0.04)'; ctx.lineWidth = 1;
+    for (let x = 0; x < W; x += 60) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+    for (let y = 0; y < H; y += 60) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ── Video lazy load ── */
+const poster = document.getElementById('video-poster');
+if (poster) {
+  poster.addEventListener('click', () => {
+    const ytId = poster.dataset.ytId;
+    if (!ytId || ytId === 'SEU_ID_AQUI') return;
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0`;
+    iframe.allow = 'autoplay; fullscreen';
+    iframe.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border:0';
+    poster.parentElement.appendChild(iframe);
+    poster.remove();
+  });
+}
+
+/* ── Scroll reveal ── */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
