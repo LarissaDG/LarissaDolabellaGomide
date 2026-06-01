@@ -50,10 +50,10 @@
     padding: 1.5rem 3rem;
     background: linear-gradient(to bottom, rgba(8,10,14,0.98) 0%, transparent 100%);
   }
-  .nav-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.1rem; font-weight: 300;
-    letter-spacing: 0.15em; color: var(--accent); text-decoration: none;
+  .nav-logo img {
+    height: 40px;
+    width: auto;
+    display: block;
   }
   .nav-links { display: flex; gap: 2.5rem; }
   .nav-links a {
@@ -356,7 +356,9 @@
 
 <!-- NAV -->
 <nav>
-  <a class="nav-logo" href="#">L — DG</a>
+  <a class="nav-logo" href="#">
+    <img src="images/logo.png" alt="LDG">
+  </a>
   <div class="nav-links">
     <a href="#about">Sobre</a>
     <a href="#projects">Projetos</a>
