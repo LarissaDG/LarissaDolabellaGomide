@@ -285,6 +285,127 @@
     .next-project { padding: 3rem 1.5rem; }
     footer { flex-direction: column; gap: 0.5rem; text-align: center; }
   }
+  /* ─────────────────────────────
+   Recursos do Projeto
+  ───────────────────────────── */
+
+  .project-resources {
+    display: grid;
+    gap: 1rem;
+    margin: 3rem 0;
+  }
+
+  .project-link-box {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: 1.25rem 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .project-link-box:hover {
+    border-color: rgba(200,240,96,0.4);
+    transform: translateY(-2px);
+  }
+
+  .project-link-label {
+    display: block;
+    font-size: 0.55rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+
+  .project-link-box a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    transition: color 0.3s ease;
+  }
+
+  .project-link-box a:hover {
+    color: var(--accent);
+  }
+
+  /* ─────────────────────────────
+     Lightbox
+  ───────────────────────────── */
+
+  .gallery-item img {
+    cursor: pointer;
+  }
+
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition: 0.3s ease;
+    z-index: 99999;
+  }
+
+  .lightbox.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .lightbox img {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+  }
+
+  .lightbox-close,
+  .lightbox-prev,
+  .lightbox-next {
+
+    position: absolute;
+
+    width: 56px;
+    height: 56px;
+
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.08);
+
+    color: white;
+    font-size: 24px;
+
+    cursor: pointer;
+
+    transition: 0.3s ease;
+  }
+
+  .lightbox-close:hover,
+  .lightbox-prev:hover,
+  .lightbox-next:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .lightbox-close {
+    top: 30px;
+    right: 30px;
+  }
+
+  .lightbox-prev {
+    left: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .lightbox-next {
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
 </style>
 </head>
 <body>
@@ -294,8 +415,8 @@
 
 <!-- NAV -->
 <nav>
-  <a class="nav-logo" href="#">
-    <img src="images/logo.png" alt="LDG">
+  <a class="nav-logo" href="../index.html">
+    <img src="../images/logo.png" alt="LDG">
   </a>
   <a class="nav-back" href="../index.html">← Todos os projetos</a>
 </nav>
@@ -370,6 +491,24 @@
       Encerre com algo que mostre crescimento.
     </p>
 
+    <div class="project-resources">
+
+    <div class="project-link-box">
+      <span class="project-link-label">Sistema online</span>
+      <a href="https://larissadg.github.io/scarf/" target="_blank">
+        Acessar BITS →
+      </a>
+    </div>
+
+    <div class="project-link-box">
+      <span class="project-link-label">Código-fonte</span>
+      <a href="https://github.com/LarissaDG/scarf." target="_blank">
+        Ver repositório →
+      </a>
+    </div>
+
+</div>
+
   </div>
 
   <!-- ③ EDITE AQUI: sidebar com detalhes técnicos -->
@@ -424,8 +563,8 @@
 
     <!-- ④ SUBSTITUA pelos seus <img> reais -->
     <div class="gallery-item g-wide g-tall">
+      <div class="gallery-item g-wide g-tall">
       <img src="../images/lencos/img1.jpeg" alt="Lenço Finalizado">
-      <div class="gallery-placeholder">Imagem principal · 800×600px sugerido</div>
     </div>
     <div class="gallery-item g-med">
       <!-- <img src="../images/lencos/img2.jpg" alt="Detalhe do algoritmo"> -->
@@ -534,6 +673,98 @@ const observer = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.07 });
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+/* ─────────────────────────────
+   Lightbox Gallery
+───────────────────────────── */
+
+const galleryImages = document.querySelectorAll('.gallery-item img');
+
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+
+const btnPrev = document.querySelector('.lightbox-prev');
+const btnNext = document.querySelector('.lightbox-next');
+const btnClose = document.querySelector('.lightbox-close');
+
+let currentIndex = 0;
+
+galleryImages.forEach((img, index) => {
+
+  img.addEventListener('click', () => {
+
+    currentIndex = index;
+
+    lightboxImg.src = img.src;
+
+    lightbox.classList.add('active');
+
+  });
+
+});
+
+function showImage(index) {
+
+  if (index < 0) {
+    index = galleryImages.length - 1;
+  }
+
+  if (index >= galleryImages.length) {
+    index = 0;
+  }
+
+  currentIndex = index;
+
+  lightboxImg.src = galleryImages[currentIndex].src;
+}
+
+btnPrev.addEventListener('click', () => {
+  showImage(currentIndex - 1);
+});
+
+btnNext.addEventListener('click', () => {
+  showImage(currentIndex + 1);
+});
+
+btnClose.addEventListener('click', () => {
+  lightbox.classList.remove('active');
+});
+
+lightbox.addEventListener('click', (e) => {
+
+  if (e.target === lightbox) {
+    lightbox.classList.remove('active');
+  }
+
+});
+
+document.addEventListener('keydown', (e) => {
+
+  if (!lightbox.classList.contains('active')) return;
+
+  if (e.key === 'ArrowLeft') {
+    showImage(currentIndex - 1);
+  }
+
+  if (e.key === 'ArrowRight') {
+    showImage(currentIndex + 1);
+  }
+
+  if (e.key === 'Escape') {
+    lightbox.classList.remove('active');
+  }
+
+});
+
 </script>
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox">
+  <button class="lightbox-close">&times;</button>
+
+  <button class="lightbox-prev">&#10094;</button>
+
+  <img id="lightbox-img" src="" alt="">
+
+  <button class="lightbox-next">&#10095;</button>
+</div>
 </body>
 </html>
