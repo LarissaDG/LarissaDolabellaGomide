@@ -70,133 +70,59 @@
   .gallery-label { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 2.5rem; display: flex; align-items: center; gap: 0.8rem; }
   .gallery-label::before { content: ''; width: 1.5rem; height: 1px; background: var(--accent); display: block; }
 
-  .gallery-grid { display: grid; grid-template-columns: repeat(12, 1fr); grid-auto-rows: 240px; gap: 0.8rem; }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: 220px;
+    gap: 0.8rem;
+  }
   .g-wide  { grid-column: span 8; }
   .g-med   { grid-column: span 6; }
   .g-third { grid-column: span 4; }
+  .g-quarter { grid-column: span 3; }
   .g-full  { grid-column: span 12; }
   .g-tall  { grid-row: span 2; }
 
   .gallery-item { overflow: hidden; position: relative; background: var(--surface2); border: 1px solid var(--border); cursor: pointer; }
   .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(10%); transition: transform 0.6s ease, filter 0.4s ease; }
   .gallery-item:hover img { transform: scale(1.04); filter: grayscale(0%); }
-
-  /* zoom hint overlay */
-  .gallery-item::after {
-    content: '⤢';
-    position: absolute; bottom: 0.8rem; right: 0.9rem;
-    font-size: 1rem; color: var(--accent);
-    opacity: 0; transition: opacity 0.3s;
-    pointer-events: none;
-  }
+  .gallery-item::after { content: '⤢'; position: absolute; bottom: 0.8rem; right: 0.9rem; font-size: 1rem; color: var(--accent); opacity: 0; transition: opacity 0.3s; pointer-events: none; }
   .gallery-item:hover::after { opacity: 1; }
 
   /* ── Lightbox ── */
-  .lightbox {
-    position: fixed; inset: 0; z-index: 99999;
-    background: rgba(4,5,8,0.97);
-    display: flex; flex-direction: column;
-    opacity: 0; visibility: hidden;
-    transition: opacity 0.35s ease, visibility 0.35s ease;
-  }
+  .lightbox { position: fixed; inset: 0; z-index: 99999; background: rgba(4,5,8,0.97); display: flex; flex-direction: column; opacity: 0; visibility: hidden; transition: opacity 0.35s ease, visibility 0.35s ease; }
   .lightbox.active { opacity: 1; visibility: visible; }
-
-  /* top bar */
-  .lb-topbar {
-    position: absolute; top: 0; left: 0; right: 0;
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 1.2rem 2rem;
-    background: linear-gradient(to bottom, rgba(4,5,8,0.9) 0%, transparent 100%);
-    z-index: 2;
-  }
+  .lb-topbar { position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 2rem; background: linear-gradient(to bottom, rgba(4,5,8,0.9) 0%, transparent 100%); z-index: 2; }
   .lb-counter { font-size: 0.62rem; letter-spacing: 0.2em; color: var(--muted); }
-  .lb-close {
-    width: 44px; height: 44px;
-    border: 1px solid rgba(200,240,96,0.25);
-    background: transparent; color: var(--text);
-    font-size: 1.2rem; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.25s;
-  }
+  .lb-close { width: 44px; height: 44px; border: 1px solid rgba(200,240,96,0.25); background: transparent; color: var(--text); font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s; }
   .lb-close:hover { border-color: var(--accent); color: var(--accent); }
-
-  /* image stage */
-  .lb-stage {
-    flex: 1;
-    display: flex; align-items: center; justify-content: center;
-    position: relative; overflow: hidden;
-    padding: 4rem 5rem;
-  }
-  .lb-img-wrap {
-    max-width: 100%; max-height: 100%;
-    display: flex; align-items: center; justify-content: center;
-    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;
-  }
+  .lb-stage { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding: 4rem 5rem; }
+  .lb-img-wrap { max-width: 100%; max-height: 100%; display: flex; align-items: center; justify-content: center; transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease; }
   .lb-img-wrap.slide-out-left  { transform: translateX(-6%); opacity: 0; }
   .lb-img-wrap.slide-out-right { transform: translateX(6%);  opacity: 0; }
-  .lb-img-wrap.slide-in-left  { transform: translateX(6%);  opacity: 0; }
-  .lb-img-wrap.slide-in-right { transform: translateX(-6%); opacity: 0; }
-  .lb-img-wrap img {
-    max-width: 100%; max-height: calc(100vh - 180px);
-    object-fit: contain; display: block;
-    box-shadow: 0 8px 60px rgba(0,0,0,0.7);
-  }
-
-  /* arrows */
-  .lb-arrow {
-    position: absolute; top: 50%; transform: translateY(-50%);
-    width: 52px; height: 52px;
-    border: 1px solid rgba(200,240,96,0.2);
-    background: rgba(8,10,14,0.7); color: var(--text);
-    font-size: 1.1rem; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.25s; z-index: 3;
-  }
+  .lb-img-wrap.slide-in-left   { transform: translateX(6%);  opacity: 0; }
+  .lb-img-wrap.slide-in-right  { transform: translateX(-6%); opacity: 0; }
+  .lb-img-wrap img { max-width: 100%; max-height: calc(100vh - 180px); object-fit: contain; display: block; box-shadow: 0 8px 60px rgba(0,0,0,0.7); }
+  .lb-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 52px; height: 52px; border: 1px solid rgba(200,240,96,0.2); background: rgba(8,10,14,0.7); color: var(--text); font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s; z-index: 3; }
   .lb-arrow:hover { border-color: var(--accent); color: var(--accent); background: rgba(200,240,96,0.08); }
   .lb-arrow.prev { left: 1rem; }
   .lb-arrow.next { right: 1rem; }
   .lb-arrow:disabled { opacity: 0.18; cursor: default; }
-
-  /* thumbnails */
-  .lb-thumbs {
-    display: flex; gap: 0.5rem; justify-content: center; align-items: center;
-    padding: 1rem 2rem 1.5rem;
-    background: linear-gradient(to top, rgba(4,5,8,0.9) 0%, transparent 100%);
-    overflow-x: auto;
-  }
-  .lb-thumb {
-    width: 56px; height: 56px; flex-shrink: 0;
-    overflow: hidden; border: 1px solid transparent;
-    cursor: pointer; transition: all 0.25s; opacity: 0.45;
-  }
+  .lb-thumbs { display: flex; gap: 0.5rem; justify-content: center; align-items: center; padding: 1rem 2rem 1.5rem; background: linear-gradient(to top, rgba(4,5,8,0.9) 0%, transparent 100%); overflow-x: auto; }
+  .lb-thumb { width: 56px; height: 56px; flex-shrink: 0; overflow: hidden; border: 1px solid transparent; cursor: pointer; transition: all 0.25s; opacity: 0.45; }
   .lb-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .lb-thumb:hover { opacity: 0.75; }
   .lb-thumb.active { border-color: var(--accent); opacity: 1; }
 
-  /* ── Project resources (fully clickable) ── */
+  /* ── Project resources ── */
   .project-resources { display: grid; gap: 1rem; margin: 3rem 0; }
-  .project-link-box {
-    display: block; text-decoration: none;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    padding: 1.25rem 1.5rem;
-    transition: all 0.3s ease;
-    color: var(--text);
-    position: relative;
-  }
-  .project-link-box::after {
-    content: '→';
-    position: absolute; right: 1.5rem; top: 50%;
-    transform: translateY(-50%);
-    color: var(--accent); font-size: 0.85rem;
-    transition: transform 0.25s;
-  }
+  .project-link-box { display: block; text-decoration: none; border: 1px solid var(--border); background: var(--surface); padding: 1.25rem 1.5rem; transition: all 0.3s ease; color: var(--text); position: relative; }
+  .project-link-box::after { content: '→'; position: absolute; right: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--accent); font-size: 0.85rem; transition: transform 0.25s; }
   .project-link-box:hover { border-color: rgba(200,240,96,0.4); transform: translateY(-2px); background: var(--surface2); }
   .project-link-box:hover::after { transform: translateY(-50%) translateX(4px); }
   .project-link-label { display: block; font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
   .project-link-title { font-size: 0.78rem; letter-spacing: 0.04em; color: var(--text); }
 
-  /* next project */
   .next-project { display: block; text-decoration: none; padding: 4rem 3rem; background: var(--surface); border-top: 1px solid var(--border); transition: background 0.3s; }
   .next-project:hover { background: var(--surface2); }
   .next-label { font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
@@ -216,8 +142,8 @@
     .project-body { grid-template-columns: 1fr; gap: 2.5rem; padding: 4rem 1.5rem; }
     .project-sidebar { position: static; }
     #gallery { padding-left: 1.5rem; padding-right: 1.5rem; }
-    .gallery-grid { grid-template-columns: 1fr 1fr; }
-    .g-wide, .g-med, .g-third, .g-full { grid-column: span 2; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 180px; }
+    .g-wide, .g-med, .g-third, .g-quarter, .g-full { grid-column: span 2; }
     .g-tall { grid-row: span 1; }
     .next-project { padding: 3rem 1.5rem; }
     footer { flex-direction: column; gap: 0.5rem; text-align: center; }
@@ -242,11 +168,11 @@
   <div class="project-hero-bg"><canvas id="hero-canvas"></canvas></div>
   <div class="project-hero-content">
     <div class="project-num-large">003 / 005</div>
-    <h1 class="project-title">Algori<em>Mith</em><br></h1>
+    <h1 class="project-title">Algori<em>Mith</em></h1>
     <div class="project-meta-bar" style="margin-top:1.5rem">
-      <div class="meta-item"><span class="meta-label">Ano</span><span class="meta-value">2025</span></div>
-      <div class="meta-item"><span class="meta-label">Papel</span><span class="meta-value">Design · Pesquisa · IA</span></div>
-      <div class="meta-item"><span class="meta-label">Contexto</span><span class="meta-value">DCC Week / UFMG</span></div>
+      <div class="meta-item"><span class="meta-label">Ano</span><span class="meta-value">2021</span></div>
+      <div class="meta-item"><span class="meta-label">Papel</span><span class="meta-value">Design · Pesquisa · Procedural</span></div>
+      <div class="meta-item"><span class="meta-label">Contexto</span><span class="meta-value">Monografia em Sistemas de Informação / UFMG</span></div>
       <div class="meta-item"><span class="meta-label">Status</span><span class="meta-value accent">Concluído</span></div>
     </div>
   </div>
@@ -257,48 +183,40 @@
 
     <h2 class="body-heading"><em>Contexto</em> e desafio</h2>
     <p class="body-text">
-      Entre os dias 20 e 22 de agosto de 2025, ocorreu a DCC Week, um evento voltado principalmente para estudantes de graduação do Departamento de Ciência da Computação. Este relato pictórico apresenta o BITS (Bugs In The System), um sistema procedural interativo desenvolvido para a geração de estampas para lenços. <strong>O sistema foi exibido durante o evento como uma iniciativa de popularização da Ciência e da Tecnologia, especialmente no contexto da Criatividade Computacional. Este trabalho discute como práticas tradicionais de design podem ser traduzidas para fluxos de trabalho computacionais por meio de uma abordagem de Research through Design (RtD), fundamentada no processo Double Diamond.</strong>
+      Este projeto é fruto de uma linha de investigação iniciada em 2021 sobre design generativo aplicado à criação de artefatos físicos. <strong>O objetivo inicial era explorar como algoritmos computacionais poderiam atuar como agentes criativos na geração de formas para joias, indo além do papel tradicional do computador como ferramenta de representação ou modelagem.</strong> A pesquisa concentrou-se principalmente no estudo do Jogo da Vida de Conway (JVC) e do Diffusion Limited Aggregation (DLA), dois sistemas capazes de produzir estruturas complexas a partir de regras relativamente simples.<br>
+      <br>
+      Ao longo da monografia, foram desenvolvidos diferentes experimentos voltados para a geração automática de geometrias destinadas à fabricação digital de joias. Embora os algoritmos demonstrassem grande potencial para a criação de formas inéditas, o processo também revelou desafios relacionados à conectividade estrutural, resistência mecânica, parametrização dos sistemas e adaptação das geometrias aos processos produtivos. Esses resultados evidenciaram que a geração computacional não elimina a necessidade do design, mas transforma o papel do designer em alguém responsável por definir regras, interpretar resultados, selecionar alternativas e atribuir significado aos artefatos produzidos.<br>
+      <br>
+      O projeto AlgoriMith surge como uma evolução natural dessa investigação. Em vez de restringir-se à geração automática de formas tridimensionais para joias, a proposta amplia o escopo para explorar sistemas computacionais como instrumentos de criação estética, construção de identidades visuais e desenvolvimento de artefatos digitais e físicos. O próprio nome do projeto nasce da combinação entre as palavras <em>algoritmo</em> e <em>mito</em>, refletindo o interesse em aproximar processos matemáticos de narrativas simbólicas e referências culturais.<br>
+      <br>
+      Essa associação foi inspirada pelas interpretações realizadas pelos participantes da pesquisa original, que frequentemente relacionavam as formas produzidas pelos algoritmos a elementos orgânicos, labirintos, raízes, árvores e estruturas naturais. A partir dessas observações, foi construída uma identidade conceitual inspirada na mitologia grega, aproximando os padrões derivados do Jogo da Vida de Conway do Labirinto do Minotauro e as estruturas orgânicas produzidas pelo DLA de referências associadas à deusa Gaia. Dessa forma, o projeto procura investigar não apenas a geração automática de formas, mas também a capacidade humana de atribuir significado, narrativa e simbolismo a padrões emergentes produzidos por sistemas computacionais.<br>
+      <br>
+      Os desdobramentos dessa pesquisa ultrapassaram o contexto acadêmico. Em 2024, uma das joias desenvolvidas a partir desses experimentos foi selecionada como <a href="https://www.instagram.com/p/C8rNiW8vnk8/?igsh=MXRqaGV1azZmM2Zieg==" target="_blank" rel="noopener noreferrer">semifinalista</a> do Singapore Jewelry Design Awards na categoria <em>Exquisite AI</em>. Além disso, muitas das ideias exploradas neste trabalho serviram como base para projetos posteriores envolvendo criatividade computacional, inteligência artificial generativa, design procedural e coautoria entre humanos e sistemas computacionais.
     </p>
 
     <h2 class="body-heading">O <em>processo</em></h2>
     <p class="body-text">
-      <strong>Descobrir & Definir</strong><br>
-      Tradicionalmente, o processo de design começa com o estabelecimento de um conceito capaz de orientar o desenvolvimento visual do projeto. No caso do BITS, a inspiração inicial surgiu de um artigo do <a href="https://lab.sciencemuseum.org.uk/colour-shape-using-computer-vision-to-explore-the-science-museum-c4b4f1cbd72c" target="_blank" rel="noopener noreferrer">Science Museum Group</a> que sugere que o mundo está se tornando menos colorido ao longo do tempo. Instigada por essa perspectiva e pela intenção de construir uma estética diretamente conectada aos processos computacionais e à visualidade procedural dos padrões gerados, optou-se por uma linguagem visual vibrante que combina elementos da pop art, cyberpunk, estética urbana, grafite, circuitos impressos e glitch art.<br>
+      O desenvolvimento do projeto ocorreu de forma iterativa, combinando pesquisa teórica, experimentação computacional e prototipação digital. Inicialmente foram estudadas referências relacionadas à arte generativa, design computacional, sistemas emergentes, teoria da complexidade e fabricação digital. Esses referenciais serviram tanto para fundamentar as escolhas metodológicas quanto para orientar a construção da identidade conceitual do projeto.<br>
       <br>
-      Nesse contexto, foi desenvolvido um sistema procedural construtivo e interativo no qual o erro deixa de ser tratado como uma falha e passa a atuar como elemento visual e ornamental. O sistema simula partículas que se movimentam pela tela e produzem padrões a partir de regras computacionais. O glitch é introduzido por meio da interação do usuário, que pode alterar parâmetros como quantidade de partículas, nível de entropia, velocidade, comportamento e intensidade das perturbações. Essas intervenções modificam continuamente a dinâmica do sistema, produzindo composições visuais únicas e imprevisíveis. As cores foram selecionadas para remeter à estética neon presente em linguagens visuais associadas à cultura digital e ao imaginário tecnológico contemporâneo.<br>
+      Em seguida, foram implementados e analisados diferentes algoritmos generativos, com destaque para o Jogo da Vida de Conway e o Diffusion Limited Aggregation. Cada sistema produzia características visuais distintas: enquanto o JVC tendia a gerar estruturas mais geométricas e labirínticas, o DLA produzia padrões ramificados que remetiam a processos naturais de crescimento. A investigação concentrou-se em compreender como parâmetros específicos influenciavam a formação das geometrias e como esses resultados poderiam ser convertidos em objetos viáveis para o contexto da joalheria.<br>
       <br>
-      <strong>Desenvolver & Entregar</strong><br>
-      Após a implementação do sistema, os usuários puderam interagir com as partículas por meio de controles na interface e manipulação direta dos elementos visuais, gerando composições ornamentais em tempo real. Quando satisfeitos com os resultados, podiam capturar automaticamente as imagens produzidas e salvá-las em seus computadores. Como as saídas preservavam o enquadramento retangular da tela, foram necessárias etapas posteriores de enquadramento, recorte e ampliação de resolução para adaptar as composições ao formato quadrado dos lenços e às exigências da impressão têxtil. Esse processo evidencia como práticas tradicionais de composição visual, curadoria e refinamento continuam desempenhando um papel importante mesmo em fluxos de trabalho computacionais.<br>
-      <br>
-      Posteriormente, foram realizados experimentos com modelos de inteligência artificial generativa para investigar sua capacidade de reinterpretar e expandir os padrões procedurais produzidos pelo sistema. Os modelos foram utilizados para inserir elementos gráficos, explorar novas possibilidades ornamentais e gerar mockups têxteis. Os resultados demonstraram que esses sistemas conseguem incorporar referências visuais e estilos estéticos diversos, ampliando o espaço de exploração criativa. Em contrapartida, observou-se que os modelos frequentemente retornavam imagens já aplicadas sobre tecidos simulados, exigindo refinamentos adicionais para adequação à impressão por sublimação.<br>
-      <br>
-      De forma semelhante ao que ocorre em processos artesanais, nos quais diferentes agentes compartilham o controle criativo durante a produção, o BITS distribui a autoria entre sistema e designer. Enquanto o sistema define estruturas visuais e paramétricas e a inteligência artificial contribui com interpretações e expansões visuais, as decisões relacionadas à seleção, curadoria, refinamento e materialização permanecem dependentes da ação humana. Os lenços finais foram refinados manualmente, impressos em cetim por meio de sublimação e posteriormente finalizados por costura, consolidando um processo híbrido de co-criação entre design tradicional, sistemas procedurais e inteligência artificial generativa.
+      Os modelos gerados passaram por sucessivas etapas de avaliação e refinamento. Foram analisados aspectos relacionados à conectividade das estruturas, espessura mínima dos elementos, estabilidade geométrica e potencial de fabricação. Paralelamente, realizou-se um processo contínuo de curadoria visual, no qual as formas produzidas pelos algoritmos eram interpretadas, selecionadas e adaptadas para diferentes aplicações. Esse processo reforçou uma dinâmica de coautoria entre designer e sistema computacional, em que o algoritmo atua como gerador de possibilidades formais e o designer como responsável pela atribuição de significado, contexto e intenção estética aos resultados obtidos.
     </p>
+
     <p class="body-text">
-      <strong>Ferramentas utilizadas:</strong> O sistema BITS foi desenvolvido utilizando HTML e JavaScript para a implementação dos algoritmos procedurais e da interface interativa. O refinamento das estampas foi realizado no Inkscape, permitindo ajustes vetoriais e preparação dos arquivos para produção. Também foram empregados modelos de inteligência artificial generativa, incluindo GPT-4o e Nano Banana da Gemini/Google, para experimentos de expansão visual, inserção de elementos gráficos e geração de mockups têxteis. A produção física dos protótipos envolveu impressão por sublimação em tecido de cetim e acabamento manual por costura.
+      <strong>Ferramentas utilizadas:</strong> AlgoriMith foi desenvolvido utilizando Python como linguagem principal de programação, tendo o Blender como ambiente de modelagem, visualização e experimentação tridimensional. Foram implementados algoritmos generativos baseados no Jogo da Vida de Conway (JVC) e no Diffusion Limited Aggregation (DLA), explorando diferentes abordagens para a geração automática de geometrias aplicáveis ao design de joias. Parte dos experimentos computacionalmente mais intensivos foi conduzida em Jupyter Notebooks, permitindo a análise e manipulação dos dados gerados pelos algoritmos antes de sua materialização em modelos tridimensionais. O processo também envolveu refinamento geométrico, aplicação procedural de materiais, adaptação para diferentes tipologias de joias — como anéis, brincos e pingentes — e preparação dos modelos para prototipagem por impressão 3D.
     </p>
 
     <h2 class="body-heading">Resultado e <em>aprendizados</em></h2>
     <p class="body-text">
-      Durante a DCC Week, o sistema BITS e os lenços produzidos a partir dele foram apresentados ao público como uma demonstração de criatividade computacional aplicada ao design têxtil. Ao longo do evento, estudantes, professores e visitantes demonstraram curiosidade tanto em relação aos lenços físicos quanto ao funcionamento do sistema generativo. As interações geraram discussões sobre autoria, inteligência artificial, design generativo e as possibilidades de aplicação dessas tecnologias em contextos criativos, contribuindo para a divulgação científica e para a aproximação entre computação e design.<br>
+      O projeto resultou em uma coleção de experimentos que demonstram o potencial dos sistemas generativos como ferramentas de exploração criativa no design. Mais do que produzir peças específicas, a pesquisa permitiu investigar como regras matemáticas simples podem dar origem a estruturas complexas, revelando novas possibilidades de colaboração entre designer e algoritmo.<br>
       <br>
-      Como resultado, foram produzidos protótipos físicos de lenços em cetim, um sistema interativo acessível online e uma série de experimentos envolvendo inteligência artificial generativa para expansão e refinamento das estampas. O projeto também permitiu investigar diferentes níveis de colaboração entre designer, sistema procedural e modelos de IA, evidenciando o papel da curadoria humana na seleção e materialização dos resultados.<br>
+      Um dos principais aprendizados foi compreender que a qualidade dos resultados depende não apenas do algoritmo utilizado, mas também das decisões tomadas durante sua parametrização, interpretação e refinamento. Muitas das limitações observadas ao longo do processo estavam menos relacionadas aos sistemas generativos em si e mais às restrições impostas pelos processos de fabricação, pelas escolhas de modelagem e pelos critérios adotados para seleção das soluções produzidas.<br>
       <br>
-      Se pudesse evoluir o projeto, exploraria processos de produção têxtil mais avançados, especialmente o uso de tintas fluorescentes reativas à luz negra. Para isso, seria necessário adaptar o fluxo de trabalho às especificações da indústria gráfica, incluindo a preparação adequada dos arquivos em perfis de cor para impressão e sublimação, possibilitando um controle mais preciso sobre a reprodução cromática e os efeitos visuais desejados. Além disso, realizaria ajustes na composição dos lenços, alinhando o símbolo da joaninha à diagonal da peça e reduzindo ligeiramente sua escala. Essas modificações contribuiriam para uma estética mais elegante, delicada e integrada ao padrão ornamental, tornando o elemento visual mais decorativo durante o uso do lenço.<br>
+      O trabalho também evidenciou a importância da prototipação como etapa fundamental do design computacional. A materialização das formas revelou aspectos estruturais, ergonômicos e produtivos que não eram perceptíveis apenas na visualização digital, reforçando a necessidade de aproximar experimentação algorítmica e fabricação física.<br>
       <br>
-      O principal aprendizado foi compreender que sistemas procedurais e inteligências artificiais não substituem o processo criativo humano, mas ampliam seu espaço de exploração. Nesse contexto, o papel do designer se expande: além de criar, passa a selecionar, interpretar, refinar e conectar diferentes agentes criativos em um processo de coautoria mediado pela tecnologia.
+      Em retrospecto, AlgoriMith representa um marco importante na minha trajetória por ter sido o projeto que consolidou minha visão do computador como parceiro criativo. Foi a partir dessas investigações que passei a compreender algoritmos não apenas como ferramentas técnicas, mas como meios capazes de ampliar processos criativos, gerar novas possibilidades estéticas e estabelecer diálogos entre matemática, design, natureza, cultura e fabricação digital. Muitas das pesquisas e projetos desenvolvidos posteriormente em criatividade computacional e inteligência artificial têm origem direta nas ideias exploradas aqui.
     </p>
-
-    <div class="project-resources">
-      <a class="project-link-box" href="https://larissadg.github.io/scarf/" target="_blank" rel="noopener noreferrer">
-        <span class="project-link-label">Sistema online</span>
-        <span class="project-link-title">Acessar BITS</span>
-      </a>
-      <a class="project-link-box" href="https://github.com/LarissaDG/scarf" target="_blank" rel="noopener noreferrer">
-        <span class="project-link-label">Código-fonte</span>
-        <span class="project-link-title">Ver repositório no GitHub</span>
-      </a>
-    </div>
 
   </div>
 
@@ -306,19 +224,28 @@
     <div class="sidebar-section">
       <div class="sidebar-label">Ferramentas</div>
       <ul class="sidebar-list">
-        <li>HTML</li><li>p5.js</li><li>Inkscape</li><li>GPT-4o</li><li>Nano Banana</li>
+        <li>Python</li>
+        <li>Blender</li>
+        <li>Jupyter Notebooks</li>
+        <li>Impressão 3D</li>
       </ul>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Técnicas</div>
       <ul class="sidebar-list">
-        <li>Design Generativo</li><li>Algoritmos Procedurais</li><li>IA Generativa de Imagem</li><li>Estamparia Digital</li>
+        <li>Design Generativo</li>
+        <li>Jogo da Vida de Conway</li>
+        <li>Diffusion Limited Aggregation</li>
+        <li>Fabricação Digital</li>
+        <li>Prototipagem</li>
       </ul>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Categorias</div>
       <ul class="sidebar-list">
-        <li>Moda &amp; Têxtil</li><li>Pesquisa Aplicada</li><li>Design de Superfície</li>
+        <li>Joalheria Computacional</li>
+        <li>Pesquisa Aplicada</li>
+        <li>Design Procedural</li>
       </ul>
     </div>
   </aside>
@@ -330,27 +257,85 @@
 <section id="gallery">
   <div class="gallery-label reveal">Galeria</div>
   <div class="gallery-grid reveal" style="transition-delay:0.1s">
+
+    <!-- Linha 1: destaque + duas pequenas -->
     <div class="gallery-item g-wide g-tall" data-index="0">
-      <img src="../images/lencos/img1.jpeg" alt="Lenço Finalizado">
+      <img src="../images/AlgoriMith/img1.jpeg" alt="AlgoriMith — imagem principal">
     </div>
-    <div class="gallery-item g-med" data-index="1">
-      <img src="../images/lencos/Lenços_selecionado.png" alt="Mockup dos lenços">
+    <div class="gallery-item g-third g-tall" data-index="1">
+      <img src="../images/AlgoriMith/Brinco.png" alt="Brinco gerado por algoritmo">
     </div>
-    <div class="gallery-item g-med" data-index="2">
-      <img src="../images/lencos/Mockup.png" alt="Mockup dos lenços">
+    <div class="gallery-item g-third" data-index="2">
+      <img src="../images/AlgoriMith/Design que virou pingente de prata.jpeg" alt="Design que virou pingente de prata">
     </div>
+
+    <!-- Linha 2: três iguais -->
     <div class="gallery-item g-third" data-index="3">
-      <img src="../images/lencos/IA_cocreation.png" alt="Mockup dos lenços">
+      <img src="../images/AlgoriMith/Slide2 (1).JPG" alt="Slide do projeto">
     </div>
+    <div class="gallery-item g-third" data-index="4">
+      <img src="../images/AlgoriMith/Slide2 (3).JPG" alt="Slide do projeto">
+    </div>
+    <div class="gallery-item g-third" data-index="5">
+      <img src="../images/AlgoriMith/Sem título.jpg" alt="Experimento generativo">
+    </div>
+
+    <!-- Linha 3: WhatsApp photos — quatro juntas -->
+    <div class="gallery-item g-quarter" data-index="6">
+      <img src="../images/AlgoriMith/WhatsApp Image 2022-01-31 at 18.38.02 (1).jpeg" alt="Protótipo físico">
+    </div>
+    <div class="gallery-item g-quarter" data-index="7">
+      <img src="../images/AlgoriMith/WhatsApp Image 2022-01-31 at 18.38.03 (2).jpeg" alt="Protótipo físico">
+    </div>
+    <div class="gallery-item g-quarter" data-index="8">
+      <img src="../images/AlgoriMith/WhatsApp Image 2022-01-31 at 18.38.03.jpeg" alt="Protótipo físico">
+    </div>
+    <div class="gallery-item g-quarter" data-index="9">
+      <img src="../images/AlgoriMith/Captura de tela 2024-01-19 225924.png" alt="Captura de tela do sistema">
+    </div>
+
+    <!-- Linha 4: screenshots + vetores -->
+    <div class="gallery-item g-med" data-index="10">
+      <img src="../images/AlgoriMith/Captura de tela 2024-01-19 230000.png" alt="Captura de tela do sistema">
+    </div>
+    <div class="gallery-item g-third" data-index="11">
+      <img src="../images/AlgoriMith/Captura de tela 2024-01-19 230031.png" alt="Captura de tela do sistema">
+    </div>
+    <div class="gallery-item g-quarter" data-index="12">
+      <img src="../images/AlgoriMith/Captura de tela 2024-01-19 230053.png" alt="Captura de tela do sistema">
+    </div>
+
+    <!-- Linha 5: elementos vetoriais e renders -->
+    <div class="gallery-item g-third" data-index="13">
+      <img src="../images/AlgoriMith/rect1.png" alt="Elemento vetorial">
+    </div>
+    <div class="gallery-item g-third" data-index="14">
+      <img src="../images/AlgoriMith/rect2.png" alt="Elemento vetorial">
+    </div>
+    <div class="gallery-item g-third" data-index="15">
+      <img src="../images/AlgoriMith/rect1077.png" alt="Elemento vetorial">
+    </div>
+
+    <!-- Linha 6: renders finais -->
+    <div class="gallery-item g-med" data-index="16">
+      <img src="../images/AlgoriMith/untitled.png" alt="Render da joia">
+    </div>
+    <div class="gallery-item g-med" data-index="17">
+      <img src="../images/AlgoriMith/untitled2.png" alt="Render da joia">
+    </div>
+    <div class="gallery-item g-third" data-index="18">
+      <img src="../images/AlgoriMith/g1013.png" alt="Geometria gerada">
+    </div>
+
   </div>
 </section>
 
 <div class="divider"></div>
 
-<a href="joalheria.html" class="next-project">
+<a href="bracis.html" class="next-project">
   <div style="max-width:1200px;margin:0 auto">
     <div class="next-label">Próximo projeto</div>
-    <div class="next-title"><em>AlgotiMith</em><span class="next-arrow">→</span></div>
+    <div class="next-title"><em>BRACIS</em><span class="next-arrow">→</span></div>
   </div>
 </a>
 
@@ -362,7 +347,7 @@
 <!-- LIGHTBOX -->
 <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Visualizador de imagens">
   <div class="lb-topbar">
-    <span class="lb-counter" id="lb-counter">1 / 4</span>
+    <span class="lb-counter" id="lb-counter">1 / 19</span>
     <button class="lb-close" id="lb-close" aria-label="Fechar">✕</button>
   </div>
   <div class="lb-stage">
@@ -437,7 +422,6 @@ document.querySelectorAll('a, .gallery-item, .lb-arrow, .lb-close, .lb-thumb, .p
   let current = 0;
   let isAnimating = false;
 
-  /* Build thumbnails */
   images.forEach((img, i) => {
     const t = document.createElement('div');
     t.className = 'lb-thumb' + (i === 0 ? ' active' : '');
@@ -455,29 +439,27 @@ document.querySelectorAll('a, .gallery-item, .lb-arrow, .lb-close, .lb-thumb, .p
     getThumbs().forEach((t, i) => t.classList.toggle('active', i === current));
     btnPrev.disabled = current === 0;
     btnNext.disabled = current === images.length - 1;
+    /* scroll thumb into view */
+    const activThumb = lbThumbs.querySelectorAll('.lb-thumb')[current];
+    if (activThumb) activThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
   }
 
   function navigate(to, direction) {
     if (isAnimating || to === current || to < 0 || to >= images.length) return;
     isAnimating = true;
-
+    if (!direction) direction = to > current ? 'next' : 'prev';
     const outClass = direction === 'next' ? 'slide-out-left' : 'slide-out-right';
-    const inClass  = direction === 'next' ? 'slide-in-right'  : 'slide-in-left';
-
+    const inClass  = direction === 'next' ? 'slide-in-right' : 'slide-in-left';
     lbWrap.classList.add(outClass);
-
     setTimeout(() => {
       lbWrap.classList.remove(outClass);
       lbWrap.classList.add(inClass);
       current = to;
       updateUI();
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          lbWrap.classList.remove(inClass);
-          isAnimating = false;
-        });
-      });
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        lbWrap.classList.remove(inClass);
+        isAnimating = false;
+      }));
     }, 280);
   }
 
@@ -493,31 +475,22 @@ document.querySelectorAll('a, .gallery-item, .lb-arrow, .lb-close, .lb-thumb, .p
     document.body.style.overflow = '';
   }
 
-  galleryItems.forEach((el, i) => {
-    el.addEventListener('click', () => open(i));
-  });
-
+  galleryItems.forEach((el, i) => el.addEventListener('click', () => open(i)));
   btnClose.addEventListener('click', close);
   btnPrev.addEventListener('click', () => navigate(current - 1, 'prev'));
   btnNext.addEventListener('click', () => navigate(current + 1, 'next'));
-
   lightbox.addEventListener('click', e => { if (e.target === lightbox) close(); });
-
   document.addEventListener('keydown', e => {
     if (!lightbox.classList.contains('active')) return;
     if (e.key === 'ArrowLeft')  navigate(current - 1, 'prev');
     if (e.key === 'ArrowRight') navigate(current + 1, 'next');
     if (e.key === 'Escape')     close();
   });
-
-  /* Touch swipe */
   let touchStartX = 0;
   lightbox.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
   lightbox.addEventListener('touchend', e => {
     const dx = e.changedTouches[0].clientX - touchStartX;
-    if (Math.abs(dx) > 50) {
-      dx < 0 ? navigate(current + 1, 'next') : navigate(current - 1, 'prev');
-    }
+    if (Math.abs(dx) > 50) dx < 0 ? navigate(current + 1, 'next') : navigate(current - 1, 'prev');
   });
 })();
 
