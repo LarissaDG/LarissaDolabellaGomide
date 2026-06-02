@@ -567,23 +567,14 @@
       <img src="../images/lencos/img1.jpeg" alt="Lenço Finalizado">
     </div>
     <div class="gallery-item g-med">
-      <!-- <img src="../images/lencos/img2.jpg" alt="Detalhe do algoritmo"> -->
-      <div class="gallery-placeholder">Detalhe</div>
+      <img src="../images/lencos/Lenços_selecionado.png" alt="Mockup dos lenços">
     </div>
     <div class="gallery-item g-med">
-      <!-- <img src="../images/lencos/img3.jpg" alt="Variação de cor"> -->
-      <div class="gallery-placeholder">Variação</div>
+      <img src="../images/lencos/Mockup.png" alt="Mockup dos lenços">
     </div>
     <div class="gallery-item g-third">
-      <div class="gallery-placeholder">Close</div>
+      <img src="../images/lencos/IA_cocreation.png" alt="Mockup dos lenços">
     </div>
-    <div class="gallery-item g-third">
-      <div class="gallery-placeholder">Processo</div>
-    </div>
-    <div class="gallery-item g-third">
-      <div class="gallery-placeholder">Final</div>
-    </div>
-
   </div>
 </section>
 
@@ -652,21 +643,6 @@ document.querySelectorAll('a, .gallery-item, .play-btn').forEach(el => {
   }
   draw();
 })();
-
-/* ── Video lazy load ── */
-const poster = document.getElementById('video-poster');
-if (poster) {
-  poster.addEventListener('click', () => {
-    const ytId = poster.dataset.ytId;
-    if (!ytId || ytId === 'SEU_ID_AQUI') return;
-    const iframe = document.createElement('iframe');
-    iframe.src = `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0`;
-    iframe.allow = 'autoplay; fullscreen';
-    iframe.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border:0';
-    poster.parentElement.appendChild(iframe);
-    poster.remove();
-  });
-}
 
 /* ── Scroll reveal ── */
 const observer = new IntersectionObserver(entries => {
