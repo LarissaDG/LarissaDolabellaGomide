@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BRACIS 2023 — Larissa DG</title>
+<meta name="description" content="Identidade visual e comunicação da Conferência Brasileira sobre Sistemas Inteligentes, BRACIS 2023.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080a0e; --surface: #0e1118; --surface2: #151a24;
+    --accent: #c8f060; --accent2: #60d4f0;
+    --text: #e8e4dc; --muted: #5a6070; --border: rgba(200,240,96,0.15);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; font-weight: 300; overflow-x: hidden; cursor: none; }
+
+  .cursor { position: fixed; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); }
+  .cursor-ring { position: fixed; width: 32px; height: 32px; border: 1px solid rgba(200,240,96,0.4); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: all 0.18s ease; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 3rem; background: linear-gradient(to bottom, rgba(8,10,14,0.98) 0%, transparent 100%); }
+  .nav-logo img { height: 10px; width: auto; display: block; }
+  .nav-back { color: var(--muted); text-decoration: none; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; transition: color 0.3s; display: flex; align-items: center; gap: 0.6rem; }
+  .nav-back:hover { color: var(--accent); }
+
+  .project-hero { height: 80vh; min-height: 500px; position: relative; display: flex; align-items: flex-end; overflow: hidden; }
+  .project-hero-bg { position: absolute; inset: 0; background: var(--surface2); }
+  .project-hero-bg canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .project-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,10,14,0.92) 0%, rgba(8,10,14,0.3) 60%, transparent 100%); pointer-events: none; }
+  .project-hero-content { position: relative; z-index: 2; padding: 4rem 3rem; max-width: 1200px; width: 100%; margin: 0 auto; }
+
+  .project-meta-bar { display: flex; gap: 2.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .meta-item { display: flex; flex-direction: column; gap: 0.3rem; }
+  .meta-label { font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); }
+  .meta-value { font-size: 0.7rem; letter-spacing: 0.06em; color: var(--text); }
+  .meta-value.accent { color: var(--accent); }
+  .project-num-large { font-size: 0.6rem; letter-spacing: 0.25em; color: var(--accent); margin-bottom: 1rem; }
+  h1.project-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.8rem, 6vw, 5.5rem); font-weight: 300; line-height: 1.0; letter-spacing: -0.02em; }
+  h1.project-title em { font-style: italic; color: var(--accent); }
+
+  .project-body { max-width: 1200px; margin: 0 auto; padding: 6rem 3rem; display: grid; grid-template-columns: 2fr 1fr; gap: 6rem; align-items: start; }
+  .project-sidebar { position: sticky; top: 7rem; }
+
+  h2.body-heading { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; margin-bottom: 1.5rem; margin-top: 3rem; }
+  h2.body-heading:first-child { margin-top: 0; }
+  h2.body-heading em { font-style: italic; color: var(--accent); }
+  .body-text { font-size: 0.78rem; line-height: 2.1; color: #9aa0b0; margin-bottom: 1.5rem; }
+  .body-text strong { color: var(--text); font-weight: 400; }
+  .body-text a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  .body-text a:hover { color: var(--accent2); }
+
+  .deliverables { list-style: none; display: flex; flex-direction: column; margin: 1.5rem 0 2rem; }
+  .deliverables li { font-size: 0.72rem; color: #9aa0b0; letter-spacing: 0.03em; padding: 0.65rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: flex-start; gap: 0.8rem; line-height: 1.6; }
+  .deliverables li::before { content: ''; width: 16px; height: 1px; background: var(--accent); flex-shrink: 0; margin-top: 0.55rem; opacity: 0.7; }
+
+  .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 2rem 0; }
+  .result-box { border: 1px solid var(--border); background: var(--surface); padding: 1.5rem; transition: border-color 0.3s, background 0.3s; }
+  .result-box:hover { border-color: rgba(200,240,96,0.35); background: var(--surface2); }
+  .result-num { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 300; color: var(--accent); line-height: 1; margin-bottom: 0.4rem; }
+  .result-desc { font-size: 0.62rem; color: var(--muted); letter-spacing: 0.06em; line-height: 1.6; }
+
+  .sidebar-section { margin-bottom: 2.5rem; }
+  .sidebar-label { font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem; }
+  .sidebar-label::before { content: ''; width: 1rem; height: 1px; background: var(--accent); display: block; }
+  .sidebar-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .sidebar-list li { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.04em; display: flex; align-items: center; gap: 0.6rem; }
+  .sidebar-list li::before { content: ''; width: 14px; height: 1px; background: var(--muted); flex-shrink: 0; }
+
+  .divider { width: 100%; height: 1px; background: linear-gradient(to right, transparent, var(--border), transparent); }
+
+  /* Gallery */
+  #gallery { padding: 4rem 3rem 6rem; max-width: 1200px; margin: 0 auto; }
+  .gallery-label { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 2.5rem; display: flex; align-items: center; gap: 0.8rem; }
+  .gallery-label::before { content: ''; width: 1.5rem; height: 1px; background: var(--accent); display: block; }
+  .gallery-grid { display: grid; grid-template-columns: repeat(12, 1fr); grid-auto-rows: 220px; gap: 0.8rem; }
+  .g-wide    { grid-column: span 8; }
+  .g-med     { grid-column: span 6; }
+  .g-third   { grid-column: span 4; }
+  .g-quarter { grid-column: span 3; }
+  .g-full    { grid-column: span 12; }
+  .g-tall    { grid-row: span 2; }
+
+  .gallery-item { overflow: hidden; position: relative; background: var(--surface2); border: 1px solid var(--border); cursor: pointer; }
+  .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(10%); transition: transform 0.6s ease, filter 0.4s ease; }
+  .gallery-item:hover img { transform: scale(1.04); filter: grayscale(0%); }
+  .gallery-item::after { content: '⤢'; position: absolute; bottom: 0.8rem; right: 0.9rem; font-size: 1rem; color: var(--accent); opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+  .gallery-item:hover::after { opacity: 1; }
+
+  /* Lightbox */
+  .lightbox { position: fixed; inset: 0; z-index: 99999; background: rgba(4,5,8,0.97); display: flex; flex-direction: column; opacity: 0; visibility: hidden; transition: opacity 0.35s ease, visibility 0.35s ease; }
+  .lightbox.active { opacity: 1; visibility: visible; }
+  .lb-topbar { position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 2rem; background: linear-gradient(to bottom, rgba(4,5,8,0.9) 0%, transparent 100%); z-index: 2; }
+  .lb-counter { font-size: 0.62rem; letter-spacing: 0.2em; color: var(--muted); }
+  .lb-close { width: 44px; height: 44px; border: 1px solid rgba(200,240,96,0.25); background: transparent; color: var(--text); font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s; }
+  .lb-close:hover { border-color: var(--accent); color: var(--accent); }
+  .lb-stage { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding: 4rem 5rem; }
+  .lb-img-wrap { max-width: 100%; max-height: 100%; display: flex; align-items: center; justify-content: center; transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease; }
+  .lb-img-wrap.slide-out-left  { transform: translateX(-6%); opacity: 0; }
+  .lb-img-wrap.slide-out-right { transform: translateX(6%);  opacity: 0; }
+  .lb-img-wrap.slide-in-left   { transform: translateX(6%);  opacity: 0; }
+  .lb-img-wrap.slide-in-right  { transform: translateX(-6%); opacity: 0; }
+  .lb-img-wrap img { max-width: 100%; max-height: calc(100vh - 180px); object-fit: contain; display: block; box-shadow: 0 8px 60px rgba(0,0,0,0.7); }
+  .lb-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 52px; height: 52px; border: 1px solid rgba(200,240,96,0.2); background: rgba(8,10,14,0.7); color: var(--text); font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s; z-index: 3; }
+  .lb-arrow:hover { border-color: var(--accent); color: var(--accent); background: rgba(200,240,96,0.08); }
+  .lb-arrow.prev { left: 1rem; }
+  .lb-arrow.next { right: 1rem; }
+  .lb-arrow:disabled { opacity: 0.18; cursor: default; }
+  .lb-thumbs { display: flex; gap: 0.5rem; justify-content: center; align-items: center; padding: 1rem 2rem 1.5rem; background: linear-gradient(to top, rgba(4,5,8,0.9) 0%, transparent 100%); overflow-x: auto; }
+  .lb-thumb { width: 56px; height: 56px; flex-shrink: 0; overflow: hidden; border: 1px solid transparent; cursor: pointer; transition: all 0.25s; opacity: 0.45; }
+  .lb-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .lb-thumb:hover { opacity: 0.75; }
+  .lb-thumb.active { border-color: var(--accent); opacity: 1; }
+
+  /* Project resources */
+  .project-resources { display: grid; gap: 1rem; margin: 3rem 0; }
+  .project-link-box { display: block; text-decoration: none; border: 1px solid var(--border); background: var(--surface); padding: 1.25rem 1.5rem; transition: all 0.3s ease; color: var(--text); position: relative; }
+  .project-link-box::after { content: '→'; position: absolute; right: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--accent); font-size: 0.85rem; transition: transform 0.25s; }
+  .project-link-box:hover { border-color: rgba(200,240,96,0.4); transform: translateY(-2px); background: var(--surface2); }
+  .project-link-box:hover::after { transform: translateY(-50%) translateX(4px); }
+  .project-link-label { display: block; font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
+  .project-link-title { font-size: 0.78rem; letter-spacing: 0.04em; color: var(--text); }
+
+  .next-project { display: block; text-decoration: none; padding: 4rem 3rem; background: var(--surface); border-top: 1px solid var(--border); transition: background 0.3s; }
+  .next-project:hover { background: var(--surface2); }
+  .next-label { font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
+  .next-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 5vw, 4rem); font-weight: 300; color: var(--text); display: flex; align-items: center; gap: 1.5rem; }
+  .next-title em { font-style: italic; color: var(--accent); }
+  .next-arrow { color: var(--accent); transition: transform 0.3s; }
+  .next-project:hover .next-arrow { transform: translateX(8px); }
+
+  footer { padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); font-size: 0.6rem; letter-spacing: 0.1em; color: var(--muted); }
+
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .project-hero-content { padding: 3rem 1.5rem; }
+    .project-body { grid-template-columns: 1fr; gap: 2.5rem; padding: 4rem 1.5rem; }
+    .project-sidebar { position: static; }
+    #gallery { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 180px; }
+    .g-wide, .g-med, .g-third, .g-quarter, .g-full { grid-column: span 2; }
+    .g-tall { grid-row: span 1; }
+    .results-grid { grid-template-columns: 1fr; }
+    .next-project { padding: 3rem 1.5rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    .lb-stage { padding: 4rem 1rem; }
+    .lb-arrow { width: 40px; height: 40px; font-size: 0.9rem; }
+    .lb-arrow.prev { left: 0.3rem; }
+    .lb-arrow.next { right: 0.3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a class="nav-logo" href="../index.html"><img src="../images/logo.png" alt="LDG"></a>
+  <a class="nav-back" href="../index.html">← Todos os projetos</a>
+</nav>
+
+<header class="project-hero">
+  <div class="project-hero-bg"><canvas id="hero-canvas"></canvas></div>
+  <div class="project-hero-content">
+    <div class="project-num-large">004 / 005</div>
+    <h1 class="project-title"><em>BRACIS</em> 2023</h1>
+    <div class="project-meta-bar" style="margin-top:1.5rem">
+      <div class="meta-item"><span class="meta-label">Ano</span><span class="meta-value">2023</span></div>
+      <div class="meta-item"><span class="meta-label">Papel</span><span class="meta-value">Identidade Visual · Comunicação · Branding</span></div>
+      <div class="meta-item"><span class="meta-label">Contexto</span><span class="meta-value">Conferência Científica Nacional · UFMG · BH</span></div>
+      <div class="meta-item"><span class="meta-label">Status</span><span class="meta-value accent">Concluído</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="project-body">
+  <div class="project-main reveal">
+
+    <h2 class="body-heading"><em>Contexto</em> e desafio</h2>
+    <p class="body-text">
+      A Conferência Brasileira sobre Sistemas Inteligentes (<strong>BRACIS</strong>) é um dos principais eventos anuais da comunidade de computação brasileira, reunindo pesquisadores, professores e estudantes em torno de temas como inteligência artificial, aprendizado de máquina e sistemas inteligentes. A edição de 2023 foi sediada em Belo Horizonte, na UFMG, e trouxe o desafio de construir uma identidade visual que representasse tanto a seriedade científica do evento quanto a cultura e o ambiente da cidade anfitriã.
+    </p>
+    <p class="body-text">
+      Fui responsável pela criação da identidade visual completa e pela coordenação da comunicação do evento — desde o logotipo até os materiais físicos entregues no dia, passando pelo alinhamento com a equipe de redes sociais. O projeto exigiu trabalhar em múltiplas frentes simultaneamente, mantendo coerência visual em todos os pontos de contato com o público.
+    </p>
+
+    <h2 class="body-heading">O <em>processo</em></h2>
+    <p class="body-text">
+      O ponto de partida foi o logotipo. A escolha do <strong>Edifício Niemeyer</strong> como referência não foi aleatória: o prédio é um ícone da arquitetura modernista de Belo Horizonte e carrega em sua forma uma linguagem visual ao mesmo tempo precisa e orgânica — algo que dialogava bem com a natureza da conferência, situada na interseção entre ciência e criatividade. A partir do símbolo construído em torno desse referencial, foram derivadas a paleta de cores, a tipografia e o sistema visual que guiou todos os materiais do evento.
+    </p>
+    <p class="body-text">
+      Com a identidade estabelecida, o trabalho se expandiu para três frentes simultâneas: a <strong>estética do site oficial</strong>, os <strong>materiais digitais para redes sociais</strong> (Instagram <a href="https://www.instagram.com/bracis_oficial" target="_blank" rel="noopener noreferrer">@bracis_oficial</a> e Twitter <a href="https://twitter.com/bracis2023" target="_blank" rel="noopener noreferrer">@bracis2023</a>) e os <strong>materiais físicos</strong> para o evento. Cada frente tinha suas próprias exigências técnicas — do layout responsivo do site às especificações de corte e sangria para produção gráfica de crachás, certificados, camisetas e sacolas. Coordenar colegas responsáveis pelas postagens enquanto mantinha a direção de arte consistente foi parte essencial do processo.
+    </p>
+
+    <h2 class="body-heading"><em>Entregas</em> do projeto</h2>
+    <ul class="deliverables">
+      <li>Desenvolvimento da identidade visual oficial do evento</li>
+      <li>Criação do logotipo inspirado no Edifício Niemeyer, símbolo de Belo Horizonte</li>
+      <li>Definição da direção de arte para materiais digitais e impressos</li>
+      <li>Desenvolvimento da estética visual do site oficial</li>
+      <li>Criação de peças para Instagram, Twitter/X e demais canais digitais</li>
+      <li>Desenvolvimento de certificados, crachás, camisetas, sacolas e materiais promocionais</li>
+      <li>Preparação de arquivos vetoriais para produção gráfica</li>
+      <li>Coordenação e alinhamento com equipe responsável pelas redes sociais</li>
+      <li>Apoio às estratégias de divulgação e marketing do evento</li>
+    </ul>
+
+    <h2 class="body-heading">Resultado e <em>aprendizados</em></h2>
+    <p class="body-text">
+      O BRACIS 2023 superou as expectativas de participação — o evento, que projetava cerca de 200 inscrições, encerrou com mais de 300 participantes confirmados. Além dos números, o projeto foi uma imersão intensa em branding aplicado ao contexto científico: aprendi sobre design editorial para mídias sociais, como preparar arquivos vetoriais para produção de produtos físicos, e os desafios práticos de manter consistência visual em múltiplos formatos e canais ao mesmo tempo.
+    </p>
+    <p class="body-text">
+      Trabalhar coordenando pessoas responsáveis pelas postagens enquanto cuidava da direção de arte foi também uma experiência valiosa de gestão criativa — comunicar intenções visuais de forma clara para que diferentes pessoas pudessem operar dentro da identidade criada sem desvios é uma habilidade que vai além do design em si.
+    </p>
+
+    <div class="results-grid">
+      <div class="result-box">
+        <div class="result-num">300+</div>
+        <div class="result-desc">inscrições confirmadas, superando a meta inicial de 200 participantes</div>
+      </div>
+      <div class="result-box">
+        <div class="result-num">6+</div>
+        <div class="result-desc">canais e formatos diferentes cobertos com a mesma identidade visual</div>
+      </div>
+    </div>
+
+    <div class="project-resources">
+      <a class="project-link-box" href="https://www.bracis.dcc.ufmg.br/" target="_blank" rel="noopener noreferrer">
+        <span class="project-link-label">Site oficial</span>
+        <span class="project-link-title">bracis.dcc.ufmg.br</span>
+      </a>
+      <a class="project-link-box" href="https://www.bracis.dcc.ufmg.br/program/main-program" target="_blank" rel="noopener noreferrer">
+        <span class="project-link-label">Programação do evento</span>
+        <span class="project-link-title">Ver programa completo</span>
+      </a>
+      <a class="project-link-box" href="https://www.instagram.com/bracis_oficial" target="_blank" rel="noopener noreferrer">
+        <span class="project-link-label">Instagram</span>
+        <span class="project-link-title">@bracis_oficial</span>
+      </a>
+    </div>
+
+  </div>
+
+  <aside class="project-sidebar reveal" style="transition-delay:0.2s">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Ferramentas</div>
+      <ul class="sidebar-list">
+        <li>Inkscape</li>
+        <li>Figma</li>
+        <li>Krita</li>
+      </ul>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Disciplinas</div>
+      <ul class="sidebar-list">
+        <li>Branding</li>
+        <li>Design Editorial</li>
+        <li>Comunicação Digital</li>
+        <li>Produção Gráfica</li>
+        <li>Gestão Criativa</li>
+      </ul>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Entregas físicas</div>
+      <ul class="sidebar-list">
+        <li>Logotipo</li>
+        <li>Certificados</li>
+        <li>Crachás</li>
+        <li>Camisetas</li>
+        <li>Sacolas</li>
+        <li>Materiais promocionais</li>
+      </ul>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Canais digitais</div>
+      <ul class="sidebar-list">
+        <li>Site oficial</li>
+        <li>Instagram</li>
+        <li>Twitter / X</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+<div class="divider"></div>
+
+<!-- GALLERY — todas as imagens da pasta BRACIS -->
+<section id="gallery">
+  <div class="gallery-label reveal">Galeria</div>
+  <div class="gallery-grid reveal" style="transition-delay:0.1s">
+
+    <!-- Linha 1: logo destaque + slide institucional -->
+    <div class="gallery-item g-med g-tall" data-index="0">
+      <img src="../images/BRACIS/logowithbackground.png" alt="Logo BRACIS com background">
+    </div>
+    <div class="gallery-item g-med g-tall" data-index="1">
+      <img src="../images/BRACIS/new_oficial_1.png" alt="BRACIS — material oficial">
+    </div>
+
+    <!-- Linha 2: logo variações -->
+    <div class="gallery-item g-third" data-index="2">
+      <img src="../images/BRACIS/logo.png" alt="Logo BRACIS">
+    </div>
+    <div class="gallery-item g-third" data-index="3">
+      <img src="../images/BRACIS/logo em branco sem background com nome por extenso.png" alt="Logo BRACIS versão branca">
+    </div>
+    <div class="gallery-item g-third" data-index="4">
+      <img src="../images/BRACIS/unnamed.png" alt="BRACIS — peça visual">
+    </div>
+
+    <!-- Linha 3: Instagram + material digital -->
+    <div class="gallery-item g-wide" data-index="5">
+      <img src="../images/BRACIS/Insta Bracis.PNG" alt="Post Instagram BRACIS">
+    </div>
+    <div class="gallery-item g-third" data-index="6">
+      <img src="../images/BRACIS/Inserir um subtítulo.jpg" alt="Material digital BRACIS">
+    </div>
+
+    <!-- Linha 4: slides do evento — quatro em fila -->
+    <div class="gallery-item g-quarter" data-index="7">
+      <img src="../images/BRACIS/Slide2.JPG" alt="Slide BRACIS">
+    </div>
+    <div class="gallery-item g-quarter" data-index="8">
+      <img src="../images/BRACIS/Slide3.JPG" alt="Slide BRACIS">
+    </div>
+    <div class="gallery-item g-quarter" data-index="9">
+      <img src="../images/BRACIS/Slide4.JPG" alt="Slide BRACIS">
+    </div>
+    <div class="gallery-item g-quarter" data-index="10">
+      <img src="../images/BRACIS/Slide5.JPG" alt="Slide BRACIS">
+    </div>
+
+    <!-- Linha 5: mais slides -->
+    <div class="gallery-item g-quarter" data-index="11">
+      <img src="../images/BRACIS/Slide6.JPG" alt="Slide BRACIS">
+    </div>
+    <div class="gallery-item g-quarter" data-index="12">
+      <img src="../images/BRACIS/Slide7.JPG" alt="Slide BRACIS">
+    </div>
+    <div class="gallery-item g-quarter" data-index="13">
+      <img src="../images/BRACIS/Slide8.JPG" alt="Slide BRACIS">
+    </div>
+    <div class="gallery-item g-quarter" data-index="14">
+      <img src="../images/BRACIS/Slide9.JPG" alt="Slide BRACIS">
+    </div>
+
+    <!-- Linha 6: slide 11 + fotos do evento -->
+    <div class="gallery-item g-third" data-index="15">
+      <img src="../images/BRACIS/Slide11.JPG" alt="Slide BRACIS">
+    </div>
+    <div class="gallery-item g-third" data-index="16">
+      <img src="../images/BRACIS/img001.jpg" alt="Evento BRACIS 2023">
+    </div>
+    <div class="gallery-item g-third" data-index="17">
+      <img src="../images/BRACIS/img002.jpg" alt="Evento BRACIS 2023">
+    </div>
+
+    <!-- Linha 7: parceiros / logos relacionados -->
+    <div class="gallery-item g-third" data-index="18">
+      <img src="../images/BRACIS/eniac.png" alt="ENIAC — evento relacionado">
+    </div>
+    <div class="gallery-item g-third" data-index="19">
+      <img src="../images/BRACIS/kdd.png" alt="KDD — evento relacionado">
+    </div>
+    <div class="gallery-item g-third" data-index="20">
+      <img src="../images/BRACIS/stil.png" alt="STIL — evento relacionado">
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<a href="fame.html" class="next-project">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="next-label">Próximo projeto</div>
+    <div class="next-title"><em>FAME</em><span class="next-arrow">→</span></div>
+  </div>
+</a>
+
+<footer>
+  <span>Larissa DG — Visual &amp; Motion Designer</span>
+  <span>© 2025</span>
+</footer>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Visualizador de imagens">
+  <div class="lb-topbar">
+    <span class="lb-counter" id="lb-counter">1 / 21</span>
+    <button class="lb-close" id="lb-close" aria-label="Fechar">✕</button>
+  </div>
+  <div class="lb-stage">
+    <button class="lb-arrow prev" id="lb-prev" aria-label="Anterior">&#8592;</button>
+    <div class="lb-img-wrap" id="lb-img-wrap">
+      <img id="lb-img" src="" alt="">
+    </div>
+    <button class="lb-arrow next" id="lb-next" aria-label="Próxima">&#8594;</button>
+  </div>
+  <div class="lb-thumbs" id="lb-thumbs"></div>
+</div>
+
+<script>
+/* Cursor */
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+(function animateCursor() {
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(animateCursor);
+})();
+document.querySelectorAll('a, .gallery-item, .lb-arrow, .lb-close, .lb-thumb, .project-link-box, .result-box').forEach(el => {
+  el.addEventListener('mouseenter', () => { ring.style.transform = 'translate(-50%,-50%) scale(2.2)'; ring.style.borderColor = 'rgba(200,240,96,0.6)'; });
+  el.addEventListener('mouseleave', () => { ring.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.borderColor = 'rgba(200,240,96,0.4)'; });
+});
+
+/* Hero canvas */
+(function() {
+  const canvas = document.getElementById('hero-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, t = 0;
+  function resize() { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; }
+  resize(); window.addEventListener('resize', resize);
+  function draw() {
+    ctx.fillStyle = 'rgba(14,17,24,0.12)'; ctx.fillRect(0,0,W,H); t += 0.004;
+    for (let i = 0; i < 3; i++) {
+      const x = W*(0.2+i*0.3)+Math.sin(t+i)*60, y = H*0.5+Math.cos(t*0.7+i*1.2)*80, r = 150+Math.sin(t*0.5+i)*50;
+      const g = ctx.createRadialGradient(x,y,0,x,y,r);
+      const hue = i===0?80:(i===1?190:50);
+      g.addColorStop(0,`hsla(${hue},60%,55%,0.08)`); g.addColorStop(1,'transparent');
+      ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    }
+    ctx.strokeStyle='rgba(200,240,96,0.04)'; ctx.lineWidth=1;
+    for (let x=0;x<W;x+=60){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    for (let y=0;y<H;y+=60){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* Lightbox */
+(function() {
+  const galleryItems = document.querySelectorAll('.gallery-item');
+  const images = Array.from(galleryItems).map(el => ({
+    src: el.querySelector('img').src,
+    alt: el.querySelector('img').alt
+  }));
+
+  const lightbox  = document.getElementById('lightbox');
+  const lbImg     = document.getElementById('lb-img');
+  const lbWrap    = document.getElementById('lb-img-wrap');
+  const lbCounter = document.getElementById('lb-counter');
+  const lbThumbs  = document.getElementById('lb-thumbs');
+  const btnClose  = document.getElementById('lb-close');
+  const btnPrev   = document.getElementById('lb-prev');
+  const btnNext   = document.getElementById('lb-next');
+
+  let current = 0, isAnimating = false;
+
+  images.forEach((img, i) => {
+    const t = document.createElement('div');
+    t.className = 'lb-thumb' + (i === 0 ? ' active' : '');
+    t.innerHTML = `<img src="${img.src}" alt="${img.alt}">`;
+    t.addEventListener('click', () => navigate(i));
+    lbThumbs.appendChild(t);
+  });
+
+  function getThumbs() { return lbThumbs.querySelectorAll('.lb-thumb'); }
+
+  function updateUI() {
+    lbImg.src = images[current].src;
+    lbImg.alt = images[current].alt;
+    lbCounter.textContent = `${current + 1} / ${images.length}`;
+    getThumbs().forEach((t, i) => t.classList.toggle('active', i === current));
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === images.length - 1;
+    const activeThumb = lbThumbs.querySelectorAll('.lb-thumb')[current];
+    if (activeThumb) activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }
+
+  function navigate(to, direction) {
+    if (isAnimating || to === current || to < 0 || to >= images.length) return;
+    isAnimating = true;
+    if (!direction) direction = to > current ? 'next' : 'prev';
+    const outClass = direction === 'next' ? 'slide-out-left' : 'slide-out-right';
+    const inClass  = direction === 'next' ? 'slide-in-right' : 'slide-in-left';
+    lbWrap.classList.add(outClass);
+    setTimeout(() => {
+      lbWrap.classList.remove(outClass);
+      lbWrap.classList.add(inClass);
+      current = to; updateUI();
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        lbWrap.classList.remove(inClass);
+        isAnimating = false;
+      }));
+    }, 280);
+  }
+
+  function open(index) { current = index; updateUI(); lightbox.classList.add('active'); document.body.style.overflow = 'hidden'; }
+  function close() { lightbox.classList.remove('active'); document.body.style.overflow = ''; }
+
+  galleryItems.forEach((el, i) => el.addEventListener('click', () => open(i)));
+  btnClose.addEventListener('click', close);
+  btnPrev.addEventListener('click', () => navigate(current - 1, 'prev'));
+  btnNext.addEventListener('click', () => navigate(current + 1, 'next'));
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) close(); });
+  document.addEventListener('keydown', e => {
+    if (!lightbox.classList.contains('active')) return;
+    if (e.key === 'ArrowLeft')  navigate(current - 1, 'prev');
+    if (e.key === 'ArrowRight') navigate(current + 1, 'next');
+    if (e.key === 'Escape')     close();
+  });
+  let touchStartX = 0;
+  lightbox.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  lightbox.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) dx < 0 ? navigate(current + 1, 'next') : navigate(current - 1, 'prev');
+  });
+})();
+
+/* Scroll reveal */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
