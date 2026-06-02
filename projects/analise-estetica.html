@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análise Estética Automatizada</title>
+<meta name="description" content="Sistema computacional para análise estética e classificação visual de artefatos, combinando design, dados e inteligência artificial.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080a0e;
+    --surface: #0e1118;
+    --surface2: #151a24;
+    --accent: #c8f060;
+    --accent2: #60d4f0;
+    --text: #e8e4dc;
+    --muted: #5a6070;
+    --border: rgba(200,240,96,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; font-weight: 300; overflow-x: hidden; cursor: none; }
+
+  .cursor { position: fixed; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); }
+  .cursor-ring { position: fixed; width: 32px; height: 32px; border: 1px solid rgba(200,240,96,0.4); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: all 0.18s ease; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 3rem; background: linear-gradient(to bottom, rgba(8,10,14,0.98) 0%, transparent 100%); }
+  .nav-logo img { height: 10px; width: auto; display: block; }
+  .nav-back { color: var(--muted); text-decoration: none; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; transition: color 0.3s; display: flex; align-items: center; gap: 0.6rem; }
+  .nav-back:hover { color: var(--accent); }
+
+  .project-hero { height: 80vh; min-height: 500px; position: relative; display: flex; align-items: flex-end; overflow: hidden; }
+  .project-hero-bg { position: absolute; inset: 0; background: var(--surface2); }
+  .project-hero-bg canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .project-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,10,14,0.92) 0%, rgba(8,10,14,0.3) 60%, transparent 100%); pointer-events: none; }
+  .project-hero-content { position: relative; z-index: 2; padding: 4rem 3rem; max-width: 1200px; width: 100%; margin: 0 auto; }
+
+  .project-meta-bar { display: flex; gap: 2.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .meta-item { display: flex; flex-direction: column; gap: 0.3rem; }
+  .meta-label { font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); }
+  .meta-value { font-size: 0.7rem; letter-spacing: 0.06em; color: var(--text); }
+  .meta-value.accent { color: var(--accent); }
+  .project-num-large { font-size: 0.6rem; letter-spacing: 0.25em; color: var(--accent); margin-bottom: 1rem; }
+  h1.project-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.8rem, 6vw, 5.5rem); font-weight: 300; line-height: 1.0; letter-spacing: -0.02em; }
+  h1.project-title em { font-style: italic; color: var(--accent); }
+
+  .project-body { max-width: 1200px; margin: 0 auto; padding: 6rem 3rem; display: grid; grid-template-columns: 2fr 1fr; gap: 6rem; align-items: start; }
+  .project-sidebar { position: sticky; top: 7rem; }
+
+  h2.body-heading { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; margin-bottom: 1.5rem; margin-top: 3rem; }
+  h2.body-heading:first-child { margin-top: 0; }
+  h2.body-heading em { font-style: italic; color: var(--accent); }
+  .body-text { font-size: 0.78rem; line-height: 2.1; color: #9aa0b0; margin-bottom: 1.5rem; }
+  .body-text strong { color: var(--text); font-weight: 400; }
+  .body-text a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  .body-text a:hover { color: var(--accent2); }
+
+  .sidebar-section { margin-bottom: 2.5rem; }
+  .sidebar-label { font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem; }
+  .sidebar-label::before { content: ''; width: 1rem; height: 1px; background: var(--accent); display: block; }
+  .sidebar-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .sidebar-list li { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.04em; display: flex; align-items: center; gap: 0.6rem; }
+  .sidebar-list li::before { content: ''; width: 14px; height: 1px; background: var(--muted); flex-shrink: 0; }
+
+  .divider { width: 100%; height: 1px; background: linear-gradient(to right, transparent, var(--border), transparent); }
+
+  /* ── Gallery ── */
+  #gallery { padding: 4rem 3rem 6rem; max-width: 1200px; margin: 0 auto; }
+  .gallery-label { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 2.5rem; display: flex; align-items: center; gap: 0.8rem; }
+  .gallery-label::before { content: ''; width: 1.5rem; height: 1px; background: var(--accent); display: block; }
+
+  .gallery-grid { display: grid; grid-template-columns: repeat(12, 1fr); grid-auto-rows: 240px; gap: 0.8rem; }
+  .g-wide  { grid-column: span 8; }
+  .g-med   { grid-column: span 6; }
+  .g-third { grid-column: span 4; }
+  .g-full  { grid-column: span 12; }
+  .g-tall  { grid-row: span 2; }
+
+  .gallery-item { overflow: hidden; position: relative; background: var(--surface2); border: 1px solid var(--border); cursor: pointer; }
+  .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(10%); transition: transform 0.6s ease, filter 0.4s ease; }
+  .gallery-item:hover img { transform: scale(1.04); filter: grayscale(0%); }
+
+  /* zoom hint overlay */
+  .gallery-item::after {
+    content: '⤢';
+    position: absolute; bottom: 0.8rem; right: 0.9rem;
+    font-size: 1rem; color: var(--accent);
+    opacity: 0; transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .gallery-item:hover::after { opacity: 1; }
+
+  /* ── Lightbox ── */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 99999;
+    background: rgba(4,5,8,0.97);
+    display: flex; flex-direction: column;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+  }
+  .lightbox.active { opacity: 1; visibility: visible; }
+
+  /* top bar */
+  .lb-topbar {
+    position: absolute; top: 0; left: 0; right: 0;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.2rem 2rem;
+    background: linear-gradient(to bottom, rgba(4,5,8,0.9) 0%, transparent 100%);
+    z-index: 2;
+  }
+  .lb-counter { font-size: 0.62rem; letter-spacing: 0.2em; color: var(--muted); }
+  .lb-close {
+    width: 44px; height: 44px;
+    border: 1px solid rgba(200,240,96,0.25);
+    background: transparent; color: var(--text);
+    font-size: 1.2rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.25s;
+  }
+  .lb-close:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* image stage */
+  .lb-stage {
+    flex: 1;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    padding: 4rem 5rem;
+  }
+  .lb-img-wrap {
+    max-width: 100%; max-height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;
+  }
+  .lb-img-wrap.slide-out-left  { transform: translateX(-6%); opacity: 0; }
+  .lb-img-wrap.slide-out-right { transform: translateX(6%);  opacity: 0; }
+  .lb-img-wrap.slide-in-left  { transform: translateX(6%);  opacity: 0; }
+  .lb-img-wrap.slide-in-right { transform: translateX(-6%); opacity: 0; }
+  .lb-img-wrap img {
+    max-width: 100%; max-height: calc(100vh - 180px);
+    object-fit: contain; display: block;
+    box-shadow: 0 8px 60px rgba(0,0,0,0.7);
+  }
+
+  /* arrows */
+  .lb-arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 52px; height: 52px;
+    border: 1px solid rgba(200,240,96,0.2);
+    background: rgba(8,10,14,0.7); color: var(--text);
+    font-size: 1.1rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.25s; z-index: 3;
+  }
+  .lb-arrow:hover { border-color: var(--accent); color: var(--accent); background: rgba(200,240,96,0.08); }
+  .lb-arrow.prev { left: 1rem; }
+  .lb-arrow.next { right: 1rem; }
+  .lb-arrow:disabled { opacity: 0.18; cursor: default; }
+
+  /* thumbnails */
+  .lb-thumbs {
+    display: flex; gap: 0.5rem; justify-content: center; align-items: center;
+    padding: 1rem 2rem 1.5rem;
+    background: linear-gradient(to top, rgba(4,5,8,0.9) 0%, transparent 100%);
+    overflow-x: auto;
+  }
+  .lb-thumb {
+    width: 56px; height: 56px; flex-shrink: 0;
+    overflow: hidden; border: 1px solid transparent;
+    cursor: pointer; transition: all 0.25s; opacity: 0.45;
+  }
+  .lb-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .lb-thumb:hover { opacity: 0.75; }
+  .lb-thumb.active { border-color: var(--accent); opacity: 1; }
+
+  /* ── Project resources (fully clickable) ── */
+  .project-resources { display: grid; gap: 1rem; margin: 3rem 0; }
+  .project-link-box {
+    display: block; text-decoration: none;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: 1.25rem 1.5rem;
+    transition: all 0.3s ease;
+    color: var(--text);
+    position: relative;
+  }
+  .project-link-box::after {
+    content: '→';
+    position: absolute; right: 1.5rem; top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent); font-size: 0.85rem;
+    transition: transform 0.25s;
+  }
+  .project-link-box:hover { border-color: rgba(200,240,96,0.4); transform: translateY(-2px); background: var(--surface2); }
+  .project-link-box:hover::after { transform: translateY(-50%) translateX(4px); }
+  .project-link-label { display: block; font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
+  .project-link-title { font-size: 0.78rem; letter-spacing: 0.04em; color: var(--text); }
+
+  /* next project */
+  .next-project { display: block; text-decoration: none; padding: 4rem 3rem; background: var(--surface); border-top: 1px solid var(--border); transition: background 0.3s; }
+  .next-project:hover { background: var(--surface2); }
+  .next-label { font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
+  .next-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 5vw, 4rem); font-weight: 300; color: var(--text); display: flex; align-items: center; gap: 1.5rem; }
+  .next-title em { font-style: italic; color: var(--accent); }
+  .next-arrow { color: var(--accent); transition: transform 0.3s; }
+  .next-project:hover .next-arrow { transform: translateX(8px); }
+
+  footer { padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); font-size: 0.6rem; letter-spacing: 0.1em; color: var(--muted); }
+
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .project-hero-content { padding: 3rem 1.5rem; }
+    .project-body { grid-template-columns: 1fr; gap: 2.5rem; padding: 4rem 1.5rem; }
+    .project-sidebar { position: static; }
+    #gallery { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; }
+    .g-wide, .g-med, .g-third, .g-full { grid-column: span 2; }
+    .g-tall { grid-row: span 1; }
+    .next-project { padding: 3rem 1.5rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    .lb-stage { padding: 4rem 1rem; }
+    .lb-arrow { width: 40px; height: 40px; font-size: 0.9rem; }
+    .lb-arrow.prev { left: 0.3rem; }
+    .lb-arrow.next { right: 0.3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a class="nav-logo" href="../index.html"><img src="../images/logo.png" alt="LDG"></a>
+  <a class="nav-back" href="../index.html">← Todos os projetos</a>
+</nav>
+
+<header class="project-hero">
+  <div class="project-hero-bg"><canvas id="hero-canvas"></canvas></div>
+  <div class="project-hero-content">
+    <div class="project-num-large">001 / 005</div>
+    <h1 class="project-title">Análise <em>Estética</em><br> Automatizada</h1>
+    <div class="project-meta-bar" style="margin-top:1.5rem">
+      <div class="meta-item"><span class="meta-label">Ano</span><span class="meta-value">2022-2026</span></div>
+      <div class="meta-item"><span class="meta-label">Papel</span><span class="meta-value">Estética · Pesquisa · IA</span></div>
+      <div class="meta-item"><span class="meta-label">Contexto</span><span class="meta-value">Mestrado / UFMG</span></div>
+      <div class="meta-item"><span class="meta-label">Status</span><span class="meta-value accent">Em andamento</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="project-body">
+  <div class="project-main reveal">
+
+    <h2 class="body-heading"><em>Contexto</em> e desafio</h2>
+    <p class="body-text">
+      Este projeto investiga a possibilidade de realizar avaliação estética computacional de imagens no contexto da criatividade computacional, com foco em pinturas geradas por modelos de inteligência artificial. Apesar dos avanços recentes dos sistemas generativos visuais, a avaliação estética permanece como um dos principais desafios da área, sendo frequentemente tratada como inerentemente subjetiva ou dependente exclusivamente do julgamento humano. Em contraste com essa perspectiva, este trabalho explora a hipótese de que determinados critérios estéticos podem ser formalizados e modelados computacionalmente <strong>de maneira objetiva</strong> a partir de avaliações consistentes realizadas por especialistas.
+      Para isso, foi investigado o uso do <a href="https://arxiv.org/abs/2411.08545" target="_blank" rel="noopener noreferrer">APDDv2 e do modelo ArtCLIP</a>, treinado com anotações produzidas por especialistas em artes visuais, como uma possível heurística computacional para estimar valor estético. A longo prazo, abordagens desse tipo podem contribuir para o desenvolvimento de ferramentas capazes de auxiliar processos criativos, oferecendo formas de análise estética integradas a fluxos de produção artística mediados por inteligência artificial. <br>
+      <br>
+      Os primeiros estudos que motivaram esta pesquisa foram realizados entre 2023 e 2024 e partiram de uma questão aparentemente simples: <strong>modelos de IA são capazes de produzir imagens consideradas visualmente desagradáveis? E, caso sejam, essa capacidade poderia representar uma habilidade criativa relevante? </strong> Com a rápida evolução dos modelos generativos, a investigação foi gradualmente reformulada para abordar questões mais amplas relacionadas à avaliação estética automatizada. Ao longo do processo, diversos experimentos exploratórios foram conduzidos, embora muitos deles não tenham sido incorporados à versão final do trabalho por questões de escopo, síntese e relevância.<br>
+      <br>
+      Uma das questões centrais da pesquisa envolve compreender o próprio conceito de estética. O termo deriva do grego <b>aisthētikos</b>, tal conceito é usado de diferentes formas, dentre elas: como sinônimo de percepção humana, de beleza e de estilo. Sobre o aspecto de percepção humana, a própria etimologia da palavra já reforça essa ideia, que também é retomada quando estudamos os fundamentos de cor, forma e composição além de outros elementos da linguagem visual, a fim de melhor comunicar uma ideia através de uma imagem. Já o dicionário trata como sinônimo de beleza, estudo do belo ou algo harmonioso. Tal conceito derivou de estudos sobre a beleza e o gosto, visando compreender como os seres humanos interpretam e avaliam obras de arte. Outro sentido que ainda pode ser atribuído ao termo estética é o estilo de uma obra ou as características de traçado que tornam reconhecíveis os trabalhos de, por exemplo, um pintor. Ao longo da tradição ocidental, a compreensão da beleza passou por transformações significativas. Para pensadores como Platão e Aristóteles, o belo estava associado à ordem, à proporção, à harmonia e à verdade. Durante a Idade Média e o Renascimento, essa concepção foi reforçada pela busca de princípios universais capazes de explicar a beleza presente na natureza e nas produções humanas. A partir da modernidade, entretanto, o foco deslocou-se progressivamente para o observador. Filósofos como David Hume e Immanuel Kant passaram a investigar o papel do gosto e da experiência subjetiva na apreciação estética, abrindo espaço para interpretações que compreendem a beleza como um fenômeno cultural, histórico e contextual.<br>
+      <br>
+      Apesar dessas divergências, observa-se uma constante ao longo dos séculos: a estreita relação entre beleza, verdade e bem. Desde a filosofia clássica até diversos pensadores contemporâneos, o belo é frequentemente associado à capacidade humana de reconhecer padrões, significados e valores que transcendem a experiência imediata. A beleza manifesta-se quando o caos é transformado em ordem, quando a matéria recebe forma, propósito e intenção. Nesse sentido, a arte, a arquitetura, a música e mesmo a ciência tornam-se expressões da busca humana por compreender e organizar o mundo. Por essa razão, a experiência estética ultrapassa o mero prazer sensorial. O encontro com o belo pode provocar contemplação, admiração e transformação interior. Seja interpretada como reflexo de leis universais, como expressão da criatividade humana ou como forma de  transcendender, seja o tempo, seja aproximando-se do divino. Portanto, a beleza desempenha um papel fundamental na elevação do espírito. Ela conecta o visível ao invisível, o temporal ao eterno, a Terra ao Céu, convidando o ser humano a superar suas limitações imediatas e a aproximar-se de ideais mais elevados de verdade, bondade e plenitude.<br>
+      <br>
+      <strong>Essa perspectiva influencia diretamente os projetos que desenvolvo. Minha busca por excelência não está relacionada apenas ao desempenho técnico ou à resolução de problemas, mas também à tentativa de criar artefatos, imagens e experiências que possuam significado, coerência e valor estético. Em última análise, este projeto nasce da convicção de que a beleza importa e de que compreender seus mecanismos pode contribuir para o desenvolvimento de sistemas criativos mais ricos, expressivos e humanamente relevantes.</strong>
+    </p>
+
+    <h2 class="body-heading">O <em>processo</em></h2>
+    <p class="body-text">
+    A metodologia está estruturada em cinco núcleos experimentais projetados para testar a robustez e o poder discriminativo do ArtCLIP. Primeiramente, comparamos obras de arte criadas por humanos do conjunto de dados APDDv2 com contrapartes sintéticas, a fim de avaliar diferenças de pontuação de base. Em seguida, analisamos a influência da riqueza semântica ao comparar descrições de pinturas do artista brasileiro Cândido Portinari escritas por humanos versus descrições geradas por IA. Depois, verificamos a capacidade do modelo de discriminar conteúdos artísticos de não artísticos utilizando o conjunto de dados MNIST. Por fim, avaliamos a estabilidade do modelo por meio de análises de robustez envolvendo ruído controlado e corrupção visual, bem como experimentos de consistência temporal utilizando sequências de imagens com modificações locais progressivas. Para mais informações acesse a <a href="#artigo">página do trabalho</a> na qual está disponível o artigo associado a esse trabalho.
+    </p>
+    <p class="body-text">
+      <strong>Ferramentas utilizadas:</strong> O trabalho foi desenvolvido utilizando as bases de dados: APDDv2, <a href="https://www.portinari.org.br/" target="_blank" rel="noopener noreferrer"> Projeto Portinari </a> (obtida via crawler do respectivo site), MNIST, e uma base de dados de Short Videos do Canal <a href="https://www.youtube.com/channel/UCQakAQOxSlMTAEyjpSYBuXg" target="_blank" rel="noopener noreferrer"> Artsy Lola Co </a> do YouTube (também obtida via crawler). Para a implementação dos algoritmos utilizou-se a linguagem Python e um computador de alto desempenho equipado com um processador Ryzen 9 5950X de 16 núcleos, 64 GB de RAM e uma placa gráfica RTX 3090 Ti com 24 GB de memória. Também foram empregados modelos de inteligência artificial generativa, incluindo o ArtClip, a família Janus-Pro da DeepSeek e o Stable Diffusion.
+    </p>
+
+    <h2 class="body-heading">Resultado e <em>aprendizados</em></h2>
+    <p class="body-text">
+      Os resultados indicam que o ArtCLIP apresenta um comportamento consistente com o julgamento de especialistas humanos, sendo capaz de diferenciar níveis de qualidade estética entre imagens criadas por humanos e imagens geradas por modelos com diferentes capacidades. Esses achados sugerem que heurísticas estéticas baseadas em conhecimento especializado podem desempenhar um papel importante no desenvolvimento de sistemas criativos computacionais, oferecendo uma alternativa escalável e formal para a avaliação estética.<br>
+      <br>
+      Além dos resultados obtidos, o projeto proporcionou aprendizados significativos sobre pesquisa científica, design experimental e análise de dados. Ao longo do trabalho, compreendi a importância de planejar cuidadosamente cada etapa da investigação, definindo com clareza quais hipóteses estão sendo testadas, quais variáveis estão sendo manipuladas, quais comparações são válidas e quais bases de dados são adequadas para responder às perguntas propostas. Também aprendi a identificar e evitar "acidentes matemáticos" e interpretações equivocadas decorrentes de escolhas metodológicas inadequadas.<br>
+      <br>
+      Outro aprendizado importante envolveu o tratamento e a preparação dos dados. Questões aparentemente simples, como a presença de valores ausentes ou nulos, podem influenciar significativamente os resultados estatísticos quando não são tratadas adequadamente. O trabalho reforçou a importância de procedimentos como limpeza de dados, remoção criteriosa de registros inconsistentes e validação cuidadosa dos experimentos antes da interpretação dos resultados.<br>
+      <br>
+      A pesquisa também contribuiu para o desenvolvimento das minhas habilidades de escrita científica, comunicação de resultados e construção de narrativas de pesquisa. Aprendi não apenas a conduzir experimentos, mas também a estruturar argumentos, justificar escolhas metodológicas e apresentar o trabalho de forma clara para diferentes públicos.<br>
+      <br>
+      Por fim, este projeto ampliou significativamente minha formação interdisciplinar. Paralelamente aos estudos em inteligência artificial e ciência de dados, aprofundei investigações sobre arte, design, estética e filosofia da beleza, além de participar de diversas trocas acadêmicas com colegas e professores de diferentes áreas. Destaco especialmente as contribuições e discussões realizadas com pesquisadores da Universidade de Coimbra e da Escola de Design da UFMG, que enriqueceram a pesquisa ao incorporar perspectivas complementares sobre criatividade, percepção estética e produção artística.
+    </p>
+
+    <div class="project-resources" id="artigo">
+      <a class="project-link-box" href="https://larissadg.github.io/ICCC/" target="_blank" rel="noopener noreferrer">
+        <span class="project-link-label">Site Artigo</span>
+        <span class="project-link-title">Página do trabalho</span>
+      </a>
+    </div>
+
+  </div>
+
+  <aside class="project-sidebar reveal" style="transition-delay:0.2s">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Ferramentas</div>
+      <ul class="sidebar-list">
+        <li>Python</li><li>p5.js</li><li>Janus-Pro (Deepseek)</li><li>GPT-4o</li><li>GPU/Slurm</li>
+      </ul>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Técnicas</div>
+      <ul class="sidebar-list">
+        <li>Aprendizado Profundo</li><li>Análise de dados</li><li>Crawler</li>
+      </ul>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Categorias</div>
+      <ul class="sidebar-list">
+        <li>Estética </li><li>Pesquisa</li><li>Imagens Sintéticas</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+<div class="divider"></div>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="gallery-label reveal">Galeria</div>
+  <div class="gallery-grid reveal" style="transition-delay:0.1s">
+    <div class="gallery-item g-med" data-index="1">
+      <img src="../images/analise-estetica/dataset.png" alt="Amostra do dataset">
+    </div>
+    <div class="gallery-item g-wide g-tall" data-index="0">
+      <img src="../images/analise-estetica/APDDv2_Portinari_MNIST.png" alt="Resultados">
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<a href="joalheria.html" class="next-project">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="next-label">Próximo projeto</div>
+    <div class="next-title">Projeto <em>BITS</em> - Bugs In The System<span class="next-arrow">→</span></div>
+  </div>
+</a>
+
+<footer>
+  <span>Larissa DG — Visual &amp; Motion Designer</span>
+  <span>© 2025</span>
+</footer>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Visualizador de imagens">
+  <div class="lb-topbar">
+    <span class="lb-counter" id="lb-counter">1 / 4</span>
+    <button class="lb-close" id="lb-close" aria-label="Fechar">✕</button>
+  </div>
+  <div class="lb-stage">
+    <button class="lb-arrow prev" id="lb-prev" aria-label="Anterior">&#8592;</button>
+    <div class="lb-img-wrap" id="lb-img-wrap">
+      <img id="lb-img" src="" alt="">
+    </div>
+    <button class="lb-arrow next" id="lb-next" aria-label="Próxima">&#8594;</button>
+  </div>
+  <div class="lb-thumbs" id="lb-thumbs"></div>
+</div>
+
+<script>
+/* Cursor */
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+(function animateCursor() {
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(animateCursor);
+})();
+document.querySelectorAll('a, .gallery-item, .lb-arrow, .lb-close, .lb-thumb, .project-link-box').forEach(el => {
+  el.addEventListener('mouseenter', () => { ring.style.transform = 'translate(-50%,-50%) scale(2.2)'; ring.style.borderColor = 'rgba(200,240,96,0.6)'; });
+  el.addEventListener('mouseleave', () => { ring.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.borderColor = 'rgba(200,240,96,0.4)'; });
+});
+
+/* Hero canvas */
+(function() {
+  const canvas = document.getElementById('hero-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, t = 0;
+  function resize() { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; }
+  resize(); window.addEventListener('resize', resize);
+  function draw() {
+    ctx.fillStyle = 'rgba(14,17,24,0.12)'; ctx.fillRect(0,0,W,H); t += 0.004;
+    for (let i = 0; i < 3; i++) {
+      const x = W*(0.2+i*0.3)+Math.sin(t+i)*60, y = H*0.5+Math.cos(t*0.7+i*1.2)*80, r = 150+Math.sin(t*0.5+i)*50;
+      const g = ctx.createRadialGradient(x,y,0,x,y,r);
+      const hue = i===0?80:(i===1?190:50);
+      g.addColorStop(0,`hsla(${hue},60%,55%,0.08)`); g.addColorStop(1,'transparent');
+      ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    }
+    ctx.strokeStyle='rgba(200,240,96,0.04)'; ctx.lineWidth=1;
+    for (let x=0;x<W;x+=60){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    for (let y=0;y<H;y+=60){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ── Lightbox ── */
+(function() {
+  const galleryItems = document.querySelectorAll('.gallery-item');
+  const images = Array.from(galleryItems).map(el => ({
+    src: el.querySelector('img').src,
+    alt: el.querySelector('img').alt
+  }));
+
+  const lightbox  = document.getElementById('lightbox');
+  const lbImg     = document.getElementById('lb-img');
+  const lbWrap    = document.getElementById('lb-img-wrap');
+  const lbCounter = document.getElementById('lb-counter');
+  const lbThumbs  = document.getElementById('lb-thumbs');
+  const btnClose  = document.getElementById('lb-close');
+  const btnPrev   = document.getElementById('lb-prev');
+  const btnNext   = document.getElementById('lb-next');
+
+  let current = 0;
+  let isAnimating = false;
+
+  /* Build thumbnails */
+  images.forEach((img, i) => {
+    const t = document.createElement('div');
+    t.className = 'lb-thumb' + (i === 0 ? ' active' : '');
+    t.innerHTML = `<img src="${img.src}" alt="${img.alt}">`;
+    t.addEventListener('click', () => navigate(i));
+    lbThumbs.appendChild(t);
+  });
+
+  function getThumbs() { return lbThumbs.querySelectorAll('.lb-thumb'); }
+
+  function updateUI() {
+    lbImg.src = images[current].src;
+    lbImg.alt = images[current].alt;
+    lbCounter.textContent = `${current + 1} / ${images.length}`;
+    getThumbs().forEach((t, i) => t.classList.toggle('active', i === current));
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === images.length - 1;
+  }
+
+  function navigate(to, direction) {
+    if (isAnimating || to === current || to < 0 || to >= images.length) return;
+    isAnimating = true;
+
+    const outClass = direction === 'next' ? 'slide-out-left' : 'slide-out-right';
+    const inClass  = direction === 'next' ? 'slide-in-right'  : 'slide-in-left';
+
+    lbWrap.classList.add(outClass);
+
+    setTimeout(() => {
+      lbWrap.classList.remove(outClass);
+      lbWrap.classList.add(inClass);
+      current = to;
+      updateUI();
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          lbWrap.classList.remove(inClass);
+          isAnimating = false;
+        });
+      });
+    }, 280);
+  }
+
+  function open(index) {
+    current = index;
+    updateUI();
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  galleryItems.forEach((el, i) => {
+    el.addEventListener('click', () => open(i));
+  });
+
+  btnClose.addEventListener('click', close);
+  btnPrev.addEventListener('click', () => navigate(current - 1, 'prev'));
+  btnNext.addEventListener('click', () => navigate(current + 1, 'next'));
+
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) close(); });
+
+  document.addEventListener('keydown', e => {
+    if (!lightbox.classList.contains('active')) return;
+    if (e.key === 'ArrowLeft')  navigate(current - 1, 'prev');
+    if (e.key === 'ArrowRight') navigate(current + 1, 'next');
+    if (e.key === 'Escape')     close();
+  });
+
+  /* Touch swipe */
+  let touchStartX = 0;
+  lightbox.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  lightbox.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) {
+      dx < 0 ? navigate(current + 1, 'next') : navigate(current - 1, 'prev');
+    }
+  });
+})();
+
+/* Scroll reveal */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
