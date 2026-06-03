@@ -134,6 +134,41 @@
   .project-link-label { display: block; font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
   .project-link-title { font-size: 0.78rem; letter-spacing: 0.04em; color: var(--text); }
 
+
+  /* ── Video ── */
+  #video-section { padding: 0 3rem 6rem; max-width: 1200px; margin: 0 auto; }
+  .video-label { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 2rem; display: flex; align-items: center; gap: 0.8rem; }
+  .video-label::before { content: ''; width: 1.5rem; height: 1px; background: var(--accent); display: block; }
+  .video-wrapper {
+    position: relative; padding-bottom: 56.25%; height: 0;
+    border: 1px solid var(--border); overflow: hidden;
+    background: var(--surface2);
+  }
+  .video-wrapper iframe {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%; border: 0;
+  }
+  /* Lazy load — iframe só monta quando o user clicar */
+  .video-poster {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    cursor: none; background: var(--surface2);
+  }
+  .video-poster img { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; }
+  .play-btn {
+    position: absolute;
+    width: 60px; height: 60px;
+    border: 1px solid rgba(200,240,96,0.5);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; color: var(--accent);
+    transition: all 0.3s;
+    background: rgba(8,10,14,0.6);
+  }
+  .video-poster:hover .play-btn { background: rgba(200,240,96,0.15); transform: scale(1.1); }
+
+  /* ── Next project ── */
+
   .next-project { display: block; text-decoration: none; padding: 4rem 3rem; background: var(--surface); border-top: 1px solid var(--border); transition: background 0.3s; }
   .next-project:hover { background: var(--surface2); }
   .next-label { font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
@@ -196,18 +231,18 @@
 
     <h2 class="body-heading"><em>Contexto</em> e desafio</h2>
     <p class="body-text">
-      O <strong>FAME — Football Analytics Modelling & Experience</strong> é o principal evento do <strong>Sports Analytics Lab da UFMG</strong>, dedicado à interseção entre ciência de dados e futebol. Nascido em 2022 como um evento de meio período, o FAME cresceu de forma consistente até se tornar, em 2024, uma conferência de dois dias com participação internacional — incluindo uma parceria com o <strong>Preston Robert Tisch Institute for Global Sport da NYU</strong>.
+      O <strong>FAME — Football Analytics Modelling & Experience</strong> é o principal evento do <strong>Sports Analytics Lab da UFMG</strong>, dedicado à interseção entre ciência de dados e futebol. Nascido em 2022 como um evento de meio período, o FAME cresceu de forma consistente até se tornar, em 2024, uma conferência de dois dias. Em 2024 contamos com uma parceria internacional com o <strong>Preston Robert Tisch Institute for Global Sport da NYU</strong>.
     </p>
     <p class="body-text">
-      Fui responsável pela identidade visual do evento ao longo de quatro edições consecutivas: do desenvolvimento do logotipo e sistema de marca até a produção de materiais físicos, peças digitais, vídeos institucionais e motion graphics. O desafio central foi criar uma identidade que fosse ao mesmo tempo <strong>rigorosa e acessível</strong> — que traduzisse o vocabulário científico da análise de dados sem perder o calor e o entusiasmo que o futebol desperta.
+      Fui responsável pela identidade visual do evento ao longo de quatro edições consecutivas: do desenvolvimento do logotipo e sistema de marca até a produção de materiais físicos, peças digitais, vídeos institucionais e motion graphics. O desafio central foi criar uma identidade visual a partir do trabalho que nosso parceiro na primeira edição: o Clube Altético Mineiro, começou a desenvolver de modo a manter uma consistência entre anos e a independência do time. Além disso, o grupo desejava algo que traduzisse o vocabulário científico da análise de dados sem perder o calor e o entusiasmo que o futebol desperta.
     </p>
 
     <h2 class="body-heading">O <em>processo</em></h2>
     <p class="body-text">
-      O desenvolvimento da identidade visual do FAME partiu da busca por um símbolo que representasse a fusão entre o universo analítico e o esporte. Os esboços iniciais exploraram referências ao campo de futebol, grafos de dados e elementos geométricos que pudessem comunicar precisão sem soar excessivamente técnicos. A identidade final encontrou esse equilíbrio ao trabalhar com formas que evocam tanto a estrutura de uma rede de dados quanto a fluidez do jogo.
+      O desenvolvimento da identidade visual do FAME partiu da busca por um símbolo que representasse a fusão entre o universo de analise de dados e o futebol. Já a logo do nosso laboratório, o SALab (Sports Analytics Lab), foi projetada para ser mais abrangente, expandindo a pesquisa de análise de dados para outros exportes além do futebol. Nessa última queriamos uma estética que lembrasse um time de futebol ou as logos de times universitários americanos. 
     </p>
     <p class="body-text">
-      A cada edição, a identidade base foi atualizada e expandida para refletir o crescimento do evento — novas trilhas, novos parceiros, novos formatos. Manter coerência visual ao longo de quatro anos, com um evento em constante transformação, exigiu construir um sistema visual robusto o suficiente para se adaptar sem perder reconhecimento. Em 2024, com a chegada da parceria internacional, os materiais precisaram também operar em inglês e responder a um novo nível de expectativa institucional.
+      A cada edição, a identidade base foi atualizada e expandida para refletir o crescimento do evento — novas trilhas, novos parceiros, novos formatos. Manter coerência visual ao longo de quatro anos, com um evento em constante transformação, exigiu construir um sistema visual robusto o suficiente para se adaptar sem perder reconhecimento. Em 2024, com a chegada da parceria internacional, os materiais precisaram também operar em inglês e responder a um novo nível de expectativa institucional. 
     </p>
     <p class="body-text">
       Além do design, atuei na <strong>produção e edição de vídeos institucionais e de divulgação</strong>, com motion graphics desenvolvidos para as campanhas de cada edição. A produção audiovisual tornou-se parte central da estratégia de comunicação do evento — os vídeos funcionavam como ponto de entrada para o público nas redes sociais e como material de apresentação oficial nos dias do evento.
@@ -260,10 +295,7 @@
     <p class="body-text">
       Trabalhar no FAME por quatro anos consecutivos foi uma das experiências mais completas da minha trajetória em design. Não apenas pelo volume de entregas ou pela diversidade de formatos — mas pela oportunidade de acompanhar um evento crescer e de ter a comunicação visual como parte ativa desse crescimento. Ver o número de inscritos saltar de 250 para 501, e saber que os materiais de divulgação ajudaram a construir essa percepção de valor, é algo que vai além dos números.
     </p>
-    <p class="body-text">
-      O projeto também me formou como produtora audiovisual: aprender a fazer motion graphics, editar vídeos institucionais e criar conteúdo que funcione tanto em tela grande quanto em stories de celular foram habilidades construídas na prática, edição após edição. A parceria com a NYU em 2024 adicionou uma camada a mais — comunicar em inglês, com um parceiro internacional, para um público ampliado, exigiu ajustar não apenas o idioma mas o tom e a ambição dos materiais.
-    </p>
-
+    
     <div class="results-grid">
       <div class="result-box">
         <div class="result-num">4</div>
@@ -276,15 +308,11 @@
     </div>
 
     <div class="project-resources">
-      <a class="project-link-box" href="https://www.youtube.com/watch?v=wNnktedlgwM" target="_blank" rel="noopener noreferrer">
-        <span class="project-link-label">Vídeo de divulgação · Motion Design</span>
-        <span class="project-link-title">Assistir no YouTube</span>
+      <a class="project-link-box" href="https://salabufmg.github.io/" target="_blank" rel="noopener noreferrer">
+        <span class="project-link-label">Site</span>
+        <span class="project-link-title">Acesse a homepage do laboratório</span>
       </a>
-      <a class="project-link-box" href="https://www.youtube.com/watch?v=AcQgWb2OD_s" target="_blank" rel="noopener noreferrer">
-        <span class="project-link-label">Vídeo institucional · Motion Design</span>
-        <span class="project-link-title">Assistir no YouTube</span>
-      </a>
-    </div>
+  </div>
 
   </div>
 
@@ -359,12 +387,6 @@
     <div class="gallery-item g-third" data-index="2">
       <img src="../images/FAME/detalhe_1.png" alt="FAME — detalhe visual">
     </div>
-    <div class="gallery-item g-third" data-index="3">
-      <img src="../images/FAME/detalhe_2.png" alt="FAME — detalhe visual">
-    </div>
-    <div class="gallery-item g-third" data-index="4">
-      <img src="../images/FAME/Detail.png" alt="FAME — detalhe visual">
-    </div>
 
     <!-- Linha 3: banner Sympla + social media -->
     <div class="gallery-item g-wide" data-index="5">
@@ -432,10 +454,42 @@
       <img src="../images/FAME/BoGf_white.png" alt="FAME — logo variação">
     </div>
     <div class="gallery-item g-third" data-index="22">
+      <img src="../images/FAME/bitmap.png" alt="FAME — logo variação">
+    </div>
+    <div class="gallery-item g-third" data-index="22">
+      <img src="../images/FAME/LogosSA_Lab finalizados.png" alt="FAME — logo variação">
+    </div>
+    <div class="gallery-item g-third" data-index="22">
       <img src="../images/FAME/insta.jpeg" alt="FAME — logo variação">
     </div>
 
   </div>
+</section>
+
+<!-- ════════════════════════════════════
+     VIDEO — cole o ID do YouTube abaixo
+     Ex: https://youtu.be/dQw4w9WgXcQ → ID = dQw4w9WgXcQ
+     ════════════════════════════════════ -->
+<section id="video-section" class="reveal">
+
+  <div class="video-label">Vídeos do projeto</div>
+
+  <div class="video-wrapper">
+    <div class="video-poster"
+         data-yt-id="wNnktedlgwM">
+      <div class="play-btn">▶</div>
+    </div>
+  </div>
+
+  <br>
+
+  <div class="video-wrapper">
+    <div class="video-poster"
+         data-yt-id="AcQgWb2OD_s">
+      <div class="play-btn">▶</div>
+    </div>
+  </div>
+
 </section>
 
 <div class="divider"></div>
@@ -594,6 +648,58 @@ document.querySelectorAll('a, .gallery-item, .lb-arrow, .lb-close, .lb-thumb, .p
     if (Math.abs(dx) > 50) dx < 0 ? navigate(current + 1, 'next') : navigate(current - 1, 'prev');
   });
 })();
+
+/* ── Video lazy load com thumbnail automática do YouTube ── */
+document.querySelectorAll('.video-poster').forEach(poster => {
+
+  const ytId = poster.dataset.ytId;
+
+  if (!ytId) return;
+
+  const thumb = document.createElement('img');
+
+  thumb.src =
+    `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg`;
+
+  thumb.onerror = () => {
+    thumb.src =
+      `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+  };
+
+  thumb.alt = 'Thumbnail do vídeo';
+
+  poster.prepend(thumb);
+
+  poster.addEventListener('click', () => {
+
+    const iframe = document.createElement('iframe');
+
+    iframe.src =
+      `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0`;
+
+    iframe.title = 'Vídeo do projeto';
+
+    iframe.allow =
+      'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+
+    iframe.allowFullscreen = true;
+
+    iframe.style.cssText = `
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      border:0;
+    `;
+
+    poster.parentElement.appendChild(iframe);
+
+    poster.remove();
+  });
+
+});
+
 
 /* Scroll reveal */
 const observer = new IntersectionObserver(entries => {
